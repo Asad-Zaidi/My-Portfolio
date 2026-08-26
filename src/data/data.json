@@ -1,0 +1,260 @@
+{
+  "meta": {
+    "title": "Asad Zaidi | Software Developer & Data Enthusiast",
+    "description": "Portfolio of Asad Zaidi — a software developer and data enthusiast building fast, scalable, user-focused digital solutions with clean code and modern technologies.",
+    "author": "Asad Zaidi",
+    "themeColor": "#0a1120",
+    "ogImage": ""
+  },
+  "personal": {
+    "name": "Asad Zaidi",
+    "firstName": "Syed Asad",
+    "lastName": "Jameel",
+    "initials": "AZ",
+    "title": "Software Developer | IT Expert | Problem Solver",
+    "greeting": "Hi, I'm",
+    "tagline": "I build fast, scalable, and user-focused digital solutions with clean code and modern technologies.",
+    "location": "Lahore, Pakistan",
+    "email": "asadzaidi@example.com",
+    "phone": "+92 300 1234567",
+    "dob": "15 Aug, 2003",
+    "nationality": "Pakistani",
+    "availability": "Open to Work",
+    "profileImage": "",
+    "heroImage": "",
+    "signature": "Asad"
+  },
+  "stats": [
+    { "id": "experience", "value": "3+", "label": "Years Experience" },
+    { "id": "projects", "value": "15+", "label": "Projects Completed" },
+    { "id": "tech", "value": "20+", "label": "Technologies Used" },
+    { "id": "dedication", "value": "100%", "label": "Dedication" }
+  ],
+  "hero": {
+    "ctaPrimary": { "label": "Hire Me", "href": "#contact" },
+    "ctaSecondary": { "label": "Contact Me", "href": "#contact" },
+    "codeSnippet": [
+      "function build() {",
+      "  return success;",
+      "}",
+      "",
+      "const engineer =",
+      "  passion + consistency;",
+      "",
+      "while (learning) {",
+      "  improve();",
+      "}"
+    ]
+  },
+  "about": {
+    "heading": "About Me",
+    "paragraph": "I'm a passionate IT professional focused on building real-world solutions. I love turning ideas into impactful applications and extracting insights from data.",
+    "traits": [
+      "Clean Code Enthusiast",
+      "Data & Analytics Lover",
+      "Always Learning New Tech",
+      "Team Player & Fast Learner"
+    ]
+  },
+  "personalInfoCard": {
+    "heading": "Personal Info",
+    "rows": [
+      { "icon": "user", "label": "Full Name", "value": "Asad Zaidi" },
+      { "icon": "cake", "label": "Date of Birth", "value": "14 Nov, 2002" },
+      { "icon": "map-pin", "label": "Location", "value": "Lahore, Pakistan" },
+      { "icon": "mail", "label": "Email", "value": "syedasad2080@gmail.com" },
+      { "icon": "phone", "label": "Phone", "value": "+92 300 1234567" },
+      { "icon": "flag", "label": "Nationality", "value": "Pakistani" },
+      { "icon": "circle-check", "label": "Availability", "value": "Open to Work", "highlight": true }
+    ]
+  },
+  "education": [
+    {
+      "id": "edu-1",
+      "date": "2026 - Continue",
+      "degree": "MS / MPhil Computer Science",
+      "institution": "COMSATS University Islamabad",
+      "campus": "Lahore Campus",
+      "status": "Enrolled",
+      "description": ""
+    },
+    {
+      "id": "edu-2",
+      "date": "2022 - 2026",
+      "degree": "BS Software Engineering",
+      "institution": "COMSATS University Islamabad",
+      "campus": "Lahore Campus",
+      "status": "Completed",
+      "description": ""
+    },
+    {
+      "id": "edu-3",
+      "date": "2019 - 2021",
+      "degree": "Intermediate (ICS)",
+      "institution": "Superior College Raiwind",
+      "campus": "Raiwind",
+      "status": "Completed",
+      "description": ""
+    },
+    {
+      "id": "edu-4",
+      "date": "2017 - 2019",
+      "degree": "Matriculation (Science)",
+      "institution": "Hashmat Public School",
+      "campus": "Raiwind, Lahore",
+      "status": "Completed",
+      "description": ""
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-1",
+      "role": "Full Stack Developer",
+      "org": "Freelance",
+      "type": "Freelance",
+      "date": "2024 - Present",
+      "location": "Remote",
+      "description": "Developed and deployed full-stack web applications using the MERN stack, authentication, and responsive UIs.",
+      "technologies": ["React", "Node.js", "MongoDB", "Express", "Tailwind", "JWT", "REST API"],
+      "logoText": "AZ",
+      "link": ""
+    },
+    {
+      "id": "exp-2",
+      "role": "Data Analyst",
+      "org": "Academic Projects",
+      "type": "Personal Projects",
+      "date": "2023 - 2024",
+      "location": "Personal Projects",
+      "description": "Performed data cleaning, analysis, visualization, and predictive modeling using Python.",
+      "technologies": ["Python", "Pandas", "NumPy", "SQL", "Power BI", "Excel", "Matplotlib"],
+      "logoText": "DA",
+      "link": ""
+    }
+  ],
+  "skills": {
+    "languages": [
+      { "name": "Python", "percent": 90 },
+      { "name": "JavaScript", "percent": 85 },
+      { "name": "C++", "percent": 75 },
+      { "name": "SQL", "percent": 80 }
+    ],
+    "tools": [
+      { "name": "React", "icon": "react" },
+      { "name": "Node.js", "icon": "nodejs" },
+      { "name": "MongoDB", "icon": "mongodb" },
+      { "name": "Git", "icon": "git" },
+      { "name": "Tailwind", "icon": "tailwind" },
+      { "name": "Docker", "icon": "docker" },
+      { "name": "VS Code", "icon": "vscode" },
+      { "name": "Figma", "icon": "figma" }
+    ]
+  },
+  "certifications": [
+    {
+      "id": "cert-1",
+      "title": "AI for Brainstorming and Planning",
+      "provider": "Google",
+      "year": "",
+      "image": "",
+      "credentialId": "J0W1PEMJCYHB",
+      "credentialUrl": "https://coursera.org/verify/J0W1PEMJCYHB",
+      "description": "Google course completion certificate focused on AI-powered brainstorming and planning workflows."
+    },
+    {
+      "id": "cert-2",
+      "title": "Google AI Fundamentals",
+      "provider": "Google",
+      "year": "",
+      "image": "",
+      "credentialId": "O2E8E4537KNP",
+      "credentialUrl": "https://coursera.org/verify/O2E8E4537KNP",
+      "description": "Google AI Fundamentals course completion certificate demonstrating foundational understanding of AI concepts."
+    },
+    {
+      "id": "cert-3",
+      "title": "Introduction to Computer",
+      "provider": "Microsoft",
+      "year": "",
+      "image": "",
+      "credentialId": "NN12LE874TFD",
+      "credentialUrl": "https://coursera.org/verify/NN12LE874TFD",
+      "description": "Microsoft course completion certificate covering foundational computer and digital literacy skills."
+    },
+    {
+      "id": "cert-4",
+      "title": "IT Fundamentals for Everyone",
+      "provider": "IBM",
+      "year": "",
+      "image": "",
+      "credentialId": "DOGKFDG3HJ21",
+      "credentialUrl": "https://coursera.org/verify/DOGKFDG3HJ21",
+      "description": "IBM and Coursera-based IT fundamentals certificate covering core digital and technical concepts for everyone."
+    },
+    {
+      "id": "cert-5",
+      "title": "Programming for Everybody (Getting Started with Python)",
+      "provider": "University of Michigan",
+      "year": "",
+      "image": "",
+      "credentialId": "YFDD9DYC5CN6",
+      "credentialUrl": "https://coursera.org/verify/YFDD9DYC5CN6",
+      "description": "University of Michigan course certificate introducing Python programming fundamentals and problem solving."
+    },
+    {
+      "id": "cert-6",
+      "title": "Start Writing Prompts like a Pro",
+      "provider": "Google",
+      "year": "",
+      "image": "",
+      "credentialId": "6VX669Z2GSUT",
+      "credentialUrl": "https://coursera.org/verify/6VX669Z2GSUT",
+      "description": "Google prompt writing and AI interaction course completion certificate focused on effective prompting techniques."
+    }
+  ],
+  "badges": [
+    { "id": "badge-1", "title": "Google AI for Brainstorming and Planning", "issuer": "", "date": "", "image": "", "credentialUrl": "" },
+    { "id": "badge-2", "title": "Google AI Fundamentals", "issuer": "", "date": "", "image": "", "credentialUrl": "" },
+    { "id": "badge-3", "title": "IT Fundamentals for Everyone", "issuer": "", "date": "", "image": "", "credentialUrl": "" }
+  ],
+  "hobbies": [
+    { "id": "hobby-1", "name": "Reading Tech Blogs", "icon": "book-open", "description": "" },
+    { "id": "hobby-2", "name": "Photography", "icon": "camera", "description": "" },
+    { "id": "hobby-3", "name": "Gaming", "icon": "gamepad-2", "description": "" },
+    { "id": "hobby-4", "name": "Traveling", "icon": "plane", "description": "" },
+    { "id": "hobby-5", "name": "Exploring New Tech", "icon": "cpu", "description": "" }
+  ],
+  "languages": [
+    { "name": "English", "level": "Fluent", "percent": 90 },
+    { "name": "Urdu", "level": "Native", "percent": 100 },
+    { "name": "Punjabi", "level": "Native", "percent": 100 }
+  ],
+  "contact": {
+    "heading": "Let's Connect",
+    "description": "Have a project in mind or just want to say hi? Feel free to reach out!",
+    "email": "asadzaidi@example.com",
+    "phone": "+92 300 1234567",
+    "location": "Lahore, Pakistan"
+  },
+  "socials": [
+    { "platform": "github", "label": "GitHub", "url": "https://github.com/" },
+    { "platform": "linkedin", "label": "LinkedIn", "url": "https://linkedin.com/in/" },
+    { "platform": "mail", "label": "Email", "url": "mailto:asadzaidi@example.com" },
+    { "platform": "whatsapp", "label": "WhatsApp", "url": "https://wa.me/923001234567" },
+    { "platform": "x", "label": "X (Twitter)", "url": "https://x.com/" },
+    { "platform": "youtube", "label": "YouTube", "url": "https://youtube.com/" }
+  ],
+  "resume": {
+    "file": "",
+    "label": "Download CV"
+  },
+  "nav": [
+    { "label": "Home", "href": "#home" },
+    { "label": "About", "href": "#about" },
+    { "label": "Experience", "href": "#experience" },
+    { "label": "Skills", "href": "#skills" },
+    { "label": "Education", "href": "#education" },
+    { "label": "Certificates", "href": "#certifications" },
+    { "label": "Contact", "href": "#contact" }
+  ]
+}
