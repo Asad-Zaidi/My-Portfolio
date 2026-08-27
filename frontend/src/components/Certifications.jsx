@@ -86,7 +86,7 @@ export default function Certifications({ items = [] }) {
 
         <div
           ref={railRef}
-          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory scrollbar-thin pb-3 -mx-1 px-1"
+          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory scrollbar-none pb-3 -mx-1 px-1"
         >
           {items.map((item, index) => (
             <Reveal

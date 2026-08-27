@@ -2,16 +2,9 @@ import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import { submitContactMessage } from "../services/api";
 
 const initialForm = { name: "", email: "", subject: "", message: "" };
-
-// Stubbed submission handler — swap this out for a real API/email service
-// call when a backend is available. Kept isolated so nothing else in the
-// component needs to change.
-async function submitContactForm(payload) {
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  return { ok: true, payload };
-}
 
 export default function Contact({ contact, resume }) {
   const [form, setForm] = useState(initialForm);
@@ -43,7 +36,7 @@ export default function Contact({ contact, resume }) {
 
     setStatus("submitting");
     try {
-      await submitContactForm(form);
+      await submitContactMessage(form);
       setStatus("success");
       setForm(initialForm);
     } catch {

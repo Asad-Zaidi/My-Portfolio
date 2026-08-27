@@ -5,7 +5,7 @@ import resumePdf from "../assets/Asad-Zaidi_CV.pdf";
 
 export default function Navbar({ personal, nav, resume }) {
   const ids = nav.map((item) => item.href.replace("#", ""));
-  const active = useActiveSection(ids);
+  const [active, selectSection] = useActiveSection(ids);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(() => {
@@ -65,6 +65,7 @@ export default function Navbar({ personal, nav, resume }) {
                 <a
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
+                  onClick={() => selectSection(id)}
                     className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive ? "text-slate-900 dark:text-white" : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
                     }`}
                 >
@@ -129,7 +130,10 @@ export default function Navbar({ personal, nav, resume }) {
               <li key={item.href}>
                 <a
                   href={item.href}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    selectSection(id);
+                    setOpen(false);
+                  }}
                   className={`block rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${isActive ? "bg-accent/20 text-slate-900 dark:text-white" : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
                     }`}
                 >

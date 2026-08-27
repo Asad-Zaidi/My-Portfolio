@@ -16,7 +16,7 @@ export default function About({ about, personalInfoCard }) {
   if (!about) return null;
 
   return (
-    <section id="about" className="bg-white dark:bg-navy-950 py-16 md:py-24">
+    <section id="about" className="bg-white -mx-6 dark:bg-navy-950 py-16 md:py-24">
       <div className="container">
         <SectionHeading icon={User} title={about.heading} />
 
@@ -58,8 +58,8 @@ export default function About({ about, personalInfoCard }) {
           {/* right: personal info card */}
           {personalInfoCard && (
             <Reveal delay={120} className="min-w-0">
-              <div className="relative min-w-0 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 shadow-card p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-6">
+              <div className="relative min-w-0 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 shadow-card p-4 sm:p-8">
+                <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-5">
                       {personalInfoCard.heading}

@@ -31,7 +31,16 @@ body.dark {
     color: #ffffff;
 }
 
-/* thin, unobtrusive scrollbar for horizontal card rails */
+/* hidden scrollbar for horizontal card rails while preserving scrolling */
+.scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+
+/* thin, unobtrusive scrollbar for other horizontal card rails */
 .scrollbar-thin::-webkit-scrollbar {
     height: 6px;
 }

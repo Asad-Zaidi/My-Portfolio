@@ -89,7 +89,7 @@ export default function Badges({ items = [] }) {
       <div className="container">
         <SectionHeading icon={Medal} title="Course Badges" subtitle="Micro-credentials earned along the way" />
 
-        <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-thin pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
+        <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
           {items.map((badge, index) => {
             const Icon = icons[index % icons.length];
             const embedId = badge.embedId || badgeEmbeds[badge.id];
@@ -109,7 +109,7 @@ export default function Badges({ items = [] }) {
                       className="absolute inset-0 m-0 cursor-zoom-in border-0 bg-transparent p-0"
                     >
                       <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                      <Maximize2 className="h-5 w-5 text-white opacity-0 transition-opacity group-hover:opacity-100" />
+                      <Maximize2 className="h-5 w-5 text-white  opacity-0 transition-opacity group-hover:opacity-100" />
                       </span>
                     </button>
                   )}

@@ -43,7 +43,10 @@ export default function Languages({ items = [], embedded = false }) {
   if (!items.length) return null;
 
   return (
-    <section id="languages" className={`${embedded ? "" : "bg-white dark:bg-navy-950"}`}>
+    <section
+      id="languages"
+      className={`${embedded ? "border-t border-slate-200 pt-8 dark:border-navy-700 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0" : "bg-white dark:bg-navy-950"}`}
+    >
       <div className={embedded ? "" : "container"}>
         <SectionHeading icon={LanguagesIcon} title="Languages" subtitle="Comfortable communicating in" align="center" />
 

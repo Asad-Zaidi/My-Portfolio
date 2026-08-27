@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Tracks which section id is currently most visible in the viewport,
@@ -6,6 +6,12 @@ import { useEffect, useState } from "react";
  */
 export default function useActiveSection(ids, offset = 120) {
   const [active, setActive] = useState(ids[0]);
+  const manualSelectionUntil = useRef(0);
+
+  const selectSection = (id) => {
+    setActive(id);
+    manualSelectionUntil.current = performance.now() + 800;
+  };
 
   useEffect(() => {
     const sections = ids
@@ -15,6 +21,8 @@ export default function useActiveSection(ids, offset = 120) {
     if (!sections.length) return undefined;
 
     const onScroll = () => {
+      if (performance.now() < manualSelectionUntil.current) return;
+
       const scrollPos = window.scrollY + offset;
       let current = sections[0].id;
       let currentTop = sections[0].offsetTop;
@@ -47,5 +55,5 @@ export default function useActiveSection(ids, offset = 120) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ids.join(","), offset]);
 
-  return active;
+  return [active, selectSection];
 }
