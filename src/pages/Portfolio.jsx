@@ -40,7 +40,7 @@ export default function Portfolio() {
   }, [meta]);
 
   return (
-    <div className="px-32 bg-white dark:bg-navy-950 text-slate-800 dark:text-slate-200 overflow-x-hidden">
+    <div className="px-8 bg-white dark:bg-navy-950 text-slate-800 dark:text-slate-200 overflow-x-hidden md:px-32">
       <Navbar personal={personal} nav={nav} resume={resume} />
 
       <main>
@@ -61,7 +61,7 @@ export default function Portfolio() {
 
         <Certifications items={certifications} />
         <Badges items={badges} />
-        <section className="bg-slate-50 dark:bg-navy-900 py-16 md:py-24">
+        <section className="-mx-8 bg-slate-50 px-8 py-8 dark:bg-navy-900 md:-mx-32 md:px-32 md:py-16">
           <div className="container grid gap-12 lg:grid-cols-2 lg:items-start">
             <Hobbies items={hobbies} embedded />
             <Languages items={languages} embedded />

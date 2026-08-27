@@ -45,7 +45,7 @@ export default function Navbar({ personal, nav, resume }) {
           : `${dark ? "bg-navy-900/60" : "bg-white/60"} backdrop-blur-sm`
         }`}
     >
-      <nav className="px-32 container flex h-[56px] items-center justify-between" aria-label="Primary">
+      <nav className="px-8 container flex h-[56px] items-center justify-between md:px-32" aria-label="Primary">
         <a
           href="#home"
           className="flex items-center gap-2 font-bold text-slate-900 dark:text-white shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-md"

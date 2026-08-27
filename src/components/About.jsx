@@ -1,7 +1,6 @@
 import { User, Cake, MapPin, Mail, Phone, Flag, CircleCheck, CheckCircle2, LayoutDashboard, Terminal } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
-import Avatar from "./Avatar";
 
 const rowIconMap = {
   user: User,
@@ -13,7 +12,7 @@ const rowIconMap = {
   "circle-check": CircleCheck,
 };
 
-export default function About({ personal, about, personalInfoCard }) {
+export default function About({ about, personalInfoCard }) {
   if (!about) return null;
 
   return (
@@ -21,9 +20,9 @@ export default function About({ personal, about, personalInfoCard }) {
       <div className="container">
         <SectionHeading icon={User} title={about.heading} />
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14 items-start">
+        <div className="grid min-w-0 gap-10 lg:grid-cols-2 lg:gap-14 items-start">
           {/* left: narrative */}
-          <Reveal>
+          <Reveal className="min-w-0">
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-base md:text-lg">
               {about.paragraph}
             </p>
@@ -58,8 +57,8 @@ export default function About({ personal, about, personalInfoCard }) {
 
           {/* right: personal info card */}
           {personalInfoCard && (
-            <Reveal delay={120}>
-              <div className="relative rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 shadow-card p-6 sm:p-8">
+            <Reveal delay={120} className="min-w-0">
+              <div className="relative min-w-0 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 shadow-card p-6 sm:p-8">
                 <div className="flex items-start justify-between gap-6">
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-5">
@@ -69,13 +68,13 @@ export default function About({ personal, about, personalInfoCard }) {
                       {personalInfoCard.rows.map((row) => {
                         const Icon = rowIconMap[row.icon] || User;
                         return (
-                          <div key={row.label} className="flex items-center gap-3 text-sm">
+                          <div key={row.label} className="flex min-w-0 items-center gap-3 text-sm">
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
                               <Icon className="h-4 w-4" />
                             </span>
-                            <dt className="w-28 shrink-0 text-slate-500 dark:text-slate-400">{row.label}</dt>
+                            <dt className="w-20 shrink-0 text-slate-500 dark:text-slate-400 sm:w-28">{row.label}</dt>
                             <dd
-                              className={`truncate font-medium ${
+                              className={`min-w-0 flex-1 overflow-hidden truncate break-words font-medium ${
                                 row.highlight
                                   ? "text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5"
                                   : "text-slate-800 dark:text-slate-100"
@@ -90,22 +89,6 @@ export default function About({ personal, about, personalInfoCard }) {
                     </dl>
                   </div>
 
-                  <div className="hidden sm:block shrink-0 -mt-2 -mr-2">
-                    <div className="relative w-28 h-32 rotate-2">
-                      <div className="absolute inset-0 rounded-2xl bg-white dark:bg-navy-800 shadow-card p-1.5 border border-slate-200 dark:border-navy-700">
-                        <Avatar
-                          name={personal.name}
-                          src={personal.profileImage}
-                          className="h-full w-full rounded-xl text-2xl"
-                        />
-                      </div>
-                      {personal.signature && (
-                        <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rotate-[-4deg] font-serif italic text-xs text-slate-400 whitespace-nowrap">
-                          {personal.signature}
-                        </span>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </Reveal>

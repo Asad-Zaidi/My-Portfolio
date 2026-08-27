@@ -10,7 +10,7 @@ export default function Reveal({ as: Tag = "div", delay = 0, className = "", chi
   return (
     <Tag
       ref={ref}
-      className={`transition-all duration-700 motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
+      className={`transition-[opacity,transform] duration-300 motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${className}`}
       style={{ transitionDelay: inView ? `${delay}ms` : "0ms" }}

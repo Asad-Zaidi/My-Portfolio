@@ -1,0 +1,22 @@
+{
+  "name": "react-rich-text-component",
+  "version": "1.0.0",
+  "description": "Modular, self-contained rich text editor and viewer for React with full formatting, sanitization, and clean paste support.",
+  "main": "index.js",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "react-icons": "^4.0.0 || ^5.0.0"
+  },
+  "keywords": [
+    "react",
+    "rich-text",
+    "editor",
+    "wysiwyg",
+    "sanitizer",
+    "html",
+    "typography"
+  ],
+  "author": "",
+  "license": "MIT"
+}

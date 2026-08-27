@@ -6,8 +6,8 @@ export default function Education({ items = [] }) {
   if (!items.length) return null;
 
   return (
-    <section id="education" className="-mx-32 bg-slate-50 dark:bg-navy-800 py-16 md:py-24">
-      <div className="container px-32">
+    <section id="education" className="-mx-12 bg-slate-50 dark:bg-navy-800 py-16 md:-mx-32 md:py-24">
+      <div className="container px-8 md:px-32">
         <SectionHeading icon={GraduationCap} title="Education" subtitle="My academic journey so far" />
 
         <div className="relative">

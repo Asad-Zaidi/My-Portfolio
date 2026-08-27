@@ -11,11 +11,31 @@ const badgeEmbeds = {
   "badge-3": "ab79668f-f9fd-4380-87ad-8d61b5ca8e04",
 };
 
-function CredlyEmbed({ badgeId, title }) {
+function CredlyEmbed({ badgeId, title, eager = false }) {
   const embedRef = useRef(null);
+  const [shouldLoad, setShouldLoad] = useState(eager);
 
   useEffect(() => {
-    if (!embedRef.current || !badgeId) return undefined;
+    if (eager || !embedRef.current || typeof IntersectionObserver === "undefined") {
+      if (!eager && typeof IntersectionObserver === "undefined") setShouldLoad(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "240px" }
+    );
+    observer.observe(embedRef.current);
+    return () => observer.disconnect();
+  }, [eager]);
+
+  useEffect(() => {
+    if (!shouldLoad || !embedRef.current || !badgeId) return undefined;
 
     const container = embedRef.current;
     container.replaceChildren();
@@ -47,7 +67,7 @@ function CredlyEmbed({ badgeId, title }) {
       observer.disconnect();
       container.replaceChildren();
     };
-  }, [badgeId]);
+  }, [badgeId, shouldLoad]);
 
   return <div ref={embedRef} aria-label={`${title} Credly badge`} className="flex h-[324px] w-[180px] justify-center overflow-hidden" />;
 }
@@ -69,13 +89,13 @@ export default function Badges({ items = [] }) {
       <div className="container">
         <SectionHeading icon={Medal} title="Course Badges" subtitle="Micro-credentials earned along the way" />
 
-        <div className="flex flex-wrap justify-center gap-x-8 gap-y-8">
+        <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-thin pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
           {items.map((badge, index) => {
             const Icon = icons[index % icons.length];
             const embedId = badge.embedId || badgeEmbeds[badge.id];
             const content = (
               <>
-                <div className="relative flex h-[324px] w-[180px] items-center justify-center">
+                <div className="group relative flex h-[324px] w-[180px] items-center justify-center overflow-hidden rounded-lg transition-[filter] duration-200 group-hover:brightness-95">
                   {embedId ? (
                     <CredlyEmbed badgeId={embedId} title={badge.title} />
                   ) : (
@@ -86,10 +106,10 @@ export default function Badges({ items = [] }) {
                       type="button"
                       onClick={() => setPreview({ ...badge, embedId })}
                       aria-label={`Preview ${badge.title} badge`}
-                      className="group absolute inset-0 cursor-zoom-in"
+                      className="absolute inset-0 m-0 cursor-zoom-in border-0 bg-transparent p-0"
                     >
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors">
-                      <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                      <Maximize2 className="h-5 w-5 text-white opacity-0 transition-opacity group-hover:opacity-100" />
                       </span>
                     </button>
                   )}
@@ -108,7 +128,7 @@ export default function Badges({ items = [] }) {
               "flex h-[360px] w-48 flex-col items-center";
 
             return (
-              <Reveal key={badge.id} delay={index * 60}>
+              <Reveal key={badge.id} delay={index * 60} className="shrink-0 snap-start">
                 <div className={className}>{content}</div>
               </Reveal>
             );
@@ -134,7 +154,7 @@ export default function Badges({ items = [] }) {
               <X className="h-5 w-5" />
             </button>
             <div className="flex justify-center bg-white/60 dark:bg-white/5">
-              <CredlyEmbed badgeId={preview.embedId} title={preview.title} />
+                  <CredlyEmbed badgeId={preview.embedId} title={preview.title} eager />
             </div>
             <a
               href={`https://www.credly.com/badges/${preview.embedId}/public_url`}

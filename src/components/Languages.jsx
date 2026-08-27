@@ -43,7 +43,7 @@ export default function Languages({ items = [], embedded = false }) {
   if (!items.length) return null;
 
   return (
-    <section id="languages" className={`${embedded ? "" : "bg-white dark:bg-navy-950"} py-16 md:py-24`}>
+    <section id="languages" className={`${embedded ? "" : "bg-white dark:bg-navy-950"}`}>
       <div className={embedded ? "" : "container"}>
         <SectionHeading icon={LanguagesIcon} title="Languages" subtitle="Comfortable communicating in" align="center" />
 

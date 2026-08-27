@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
  * Fires only once so re-scrolling past a section doesn't replay the animation.
  */
 export default function useReveal(options = {}) {
-  const { threshold = 0.15, rootMargin = "0px 0px -60px 0px" } = options;
+  const { threshold = 0.15, rootMargin = "0px 0px -20px 0px" } = options;
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
 

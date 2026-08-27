@@ -28,12 +28,12 @@ export default function Hero({ personal, stats, hero, socials }) {
   return (
     <section
       id="home"
-      className="relative -mx-32 overflow-hidden bg-white dark:bg-navy-900 pt-28 pb-16 md:pt-36 md:pb-24"
+      className="relative -mx-8 overflow-hidden bg-white dark:bg-navy-900 pt-28 pb-16 md:-mx-32 md:pt-36 md:pb-24"
     >
       {/* decorative background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-accent/20 blur-3xl motion-safe:animate-blob" />
-        <div className="absolute top-1/3 -right-16 h-80 w-80 rounded-full bg-blue-400/10 blur-3xl motion-safe:animate-blob [animation-delay:2s]" />
+        <div className="absolute -top-24 -left-24 hidden h-72 w-72 rounded-full bg-accent/20 blur-3xl motion-safe:animate-blob sm:block" />
+        <div className="absolute top-1/3 -right-16 hidden h-80 w-80 rounded-full bg-blue-400/10 blur-3xl motion-safe:animate-blob [animation-delay:2s] sm:block" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.12),transparent_55%)]" />
         <svg className="absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden focusable="false">
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -43,7 +43,7 @@ export default function Hero({ personal, stats, hero, socials }) {
         </svg>
       </div>
 
-      <div className="container relative grid gap-14 px-32 lg:grid-cols-2 lg:items-center">
+      <div className="container relative grid gap-14 px-8 md:px-32 lg:grid-cols-2 lg:items-center">
         {/* text column */}
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-sm text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200 motion-safe:animate-fade-up">

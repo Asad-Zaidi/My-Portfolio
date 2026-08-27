@@ -59,8 +59,8 @@ export default function Contact({ contact, resume }) {
   const hasResume = Boolean(resume?.file);
 
   return (
-    <section id="contact" className="-mx-32 bg-slate-50 dark:bg-navy-900 py-16 md:py-24">
-      <div className="container px-32">
+    <section id="contact" className="-mx-12 bg-slate-50 dark:bg-navy-900 py-16 md:-mx-32 md:py-24">
+      <div className="container px-8 md:px-32">
         <SectionHeading icon={Mail} title={contact.heading} subtitle={contact.description} />
 
         <div className="grid gap-10 lg:grid-cols-5">

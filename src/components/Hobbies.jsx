@@ -14,8 +14,8 @@ export default function Hobbies({ items = [], embedded = false }) {
   if (!items.length) return null;
 
   return (
-    <section id="hobbies" className={`${embedded ? "" : "-mx-32 bg-slate-50 dark:bg-navy-900"} py-16 md:py-24`}>
-      <div className={embedded ? "" : "container px-32"}>
+    <section id="hobbies" className={`${embedded ? "" : "-mx-8 bg-slate-50 dark:bg-navy-900 md:-mx-32"}`}>
+      <div className={embedded ? "" : "container px-8 md:px-32"}>
         <SectionHeading icon={Heart} title="Hobbies" subtitle="What I enjoy outside of work" />
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

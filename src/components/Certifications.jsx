@@ -56,7 +56,7 @@ export default function Certifications({ items = [] }) {
   };
 
   return (
-    <section id="certifications" className="bg-slate-50 dark:bg-navy-900 py-16 md:py-24">
+    <section id="certifications" className="-mx-8 bg-slate-50 px-8 py-8 dark:bg-navy-900 md:-mx-32 md:px-32 md:py-16">
       <div className="container">
         <SectionHeading
           icon={ClipboardList}

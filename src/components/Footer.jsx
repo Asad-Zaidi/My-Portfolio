@@ -5,8 +5,8 @@ export default function Footer({ personal, nav, socials }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative -mx-32 bg-white text-slate-600 dark:bg-navy-950 dark:text-slate-400 pt-14 pb-8">
-      <div className="container px-32 flex flex-col items-center gap-6 text-center">
+    <footer className="relative -mx-12 bg-white text-slate-600 dark:bg-navy-950 dark:text-slate-400 pt-14 pb-8 md:-mx-32">
+      <div className="container px-8 flex flex-col items-center gap-6 text-center md:px-32">
         <a href="#home" className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm">
             {personal.initials}
