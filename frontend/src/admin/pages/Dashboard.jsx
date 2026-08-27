@@ -1,0 +1,97 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  GraduationCap,
+  Briefcase,
+  Award,
+  Inbox,
+  ArrowUpRight,
+  Loader2,
+  Clock,
+} from "lucide-react";
+import { usePortfolioData } from "../context/PortfolioDataContext";
+import { useAuth } from "../context/AuthContext";
+import { adminGetMessages } from "../../services/api";
+
+function StatCard({ icon: Icon, label, value, to }) {
+  return (
+    <Link
+      to={to}
+      className="group flex items-center justify-between rounded-2xl border border-navy-700 bg-navy-800/50 p-5 transition-colors hover:border-accent/40"
+    >
+      <div>
+        <div className="text-2xl font-bold text-white">{value}</div>
+        <div className="mt-0.5 text-sm text-slate-400">{label}</div>
+      </div>
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent-light transition-transform group-hover:scale-105">
+        <Icon className="h-5 w-5" />
+      </div>
+    </Link>
+  );
+}
+
+export default function Dashboard() {
+  const { data, loading } = usePortfolioData();
+  const { token } = useAuth();
+  const [unread, setUnread] = useState(null);
+
+  useEffect(() => {
+    adminGetMessages(token)
+      .then((messages) => setUnread(messages.filter((m) => !m.read).length))
+      .catch(() => setUnread(null));
+  }, [token]);
+
+  if (loading || !data) {
+    return (
+      <div className="flex items-center justify-center py-24 text-slate-500">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-xl font-bold text-white">Welcome back{data.personal?.firstName ? `, ${data.personal.firstName}` : ""} 👋</h1>
+        <p className="mt-1 text-sm text-slate-400">Here's a quick snapshot of your portfolio content.</p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard icon={GraduationCap} label="Education entries" value={data.education?.length ?? 0} to="/admin/sections/education" />
+        <StatCard icon={Briefcase} label="Experience entries" value={data.experience?.length ?? 0} to="/admin/sections/experience" />
+        <StatCard icon={Award} label="Certifications" value={data.certifications?.length ?? 0} to="/admin/sections/certifications" />
+        <StatCard icon={Inbox} label="Unread messages" value={unread ?? "–"} to="/admin/messages" />
+      </div>
+
+      <div className="rounded-2xl border border-navy-700 bg-navy-800/50 p-6">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-300">
+          <Clock className="h-4 w-4" /> Last updated
+        </div>
+        <p className="text-sm text-slate-400">
+          {data.updatedAt ? new Date(data.updatedAt).toLocaleString() : "Never"}
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-navy-700 bg-navy-800/50 p-6">
+        <div className="mb-3 text-sm font-semibold text-slate-300">Quick links</div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {[
+            ["General & SEO", "/admin/sections/meta"],
+            ["Personal Info", "/admin/sections/personal"],
+            ["Hero Section", "/admin/sections/hero"],
+            ["Skills", "/admin/sections/skills"],
+          ].map(([label, to]) => (
+            <Link
+              key={to}
+              to={to}
+              className="flex items-center justify-between rounded-lg border border-navy-700 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:border-accent/40 hover:text-white"
+            >
+              {label}
+              <ArrowUpRight className="h-4 w-4 text-slate-500" />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -2,21 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { ClipboardList, ChevronLeft, ChevronRight, Award, ExternalLink, X, Maximize2 } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
-import brainstormingCertificate from "../assets/Certificates/AI for Brainstorming and Planning_page-0001.jpg";
-import aiFundamentalsCertificate from "../assets/Certificates/Google AI Fundamentals_page-0001.jpg";
-import introductionToComputerCertificate from "../assets/Certificates/Introduction to Computer - Microsoft_page-0001.jpg";
-import itFundamentalsCertificate from "../assets/Certificates/IT Fundamentals for Everyone - IBM_page-0001.jpg";
-import pythonCertificate from "../assets/Certificates/Programming for Everybody (Getting Started with Python) - University of Michigan_page-0001.jpg";
-import promptsCertificate from "../assets/Certificates/Start Writing Prompts like a Pro - Google_page-0001.jpg";
-
-const certificateImages = {
-  "cert-1": brainstormingCertificate,
-  "cert-2": aiFundamentalsCertificate,
-  "cert-3": introductionToComputerCertificate,
-  "cert-4": itFundamentalsCertificate,
-  "cert-5": pythonCertificate,
-  "cert-6": promptsCertificate,
-};
 
 const gradients = [
   "from-blue-500 to-indigo-600",
@@ -96,12 +81,12 @@ export default function Certifications({ items = [] }) {
             >
               <button
                 type="button"
-                onClick={() => (certificateImages[item.id] || item.image) && setPreview({ ...item, image: certificateImages[item.id] || item.image })}
-                className={`relative block aspect-[5/4] w-full ${certificateImages[item.id] || item.image ? "cursor-zoom-in" : "cursor-default"}`}
-                aria-label={certificateImages[item.id] || item.image ? `Preview ${item.title} certificate` : item.title}
+                onClick={() => item.image && setPreview({ ...item })}
+                  className={`relative block aspect-[5/4] w-full ${item.image ? "cursor-zoom-in" : "cursor-default"}`}
+                  aria-label={item.image ? `Preview ${item.title} certificate` : item.title}
               >
-                <CertImage item={{ ...item, image: certificateImages[item.id] || item.image }} index={index} />
-                {(certificateImages[item.id] || item.image) && (
+                  <CertImage item={item} index={index} />
+                  {item.image && (
                   <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
                     <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>

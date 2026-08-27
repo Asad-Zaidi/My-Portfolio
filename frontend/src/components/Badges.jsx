@@ -1,22 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Medal, Award, Trophy, BadgeCheck, ShieldCheck, ExternalLink, X, Maximize2 } from "lucide-react";
+import { Medal, X, Maximize2 } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
-const icons = [Award, BadgeCheck, Trophy, ShieldCheck, Medal];
-
-const badgeEmbeds = {
-  "badge-1": "9fb557b8-ea05-4942-a05b-8244458b4d21",
-  "badge-2": "4bfa62cd-77a7-4637-b410-de0b0e4d7462",
-  "badge-3": "ab79668f-f9fd-4380-87ad-8d61b5ca8e04",
-};
-
-function CredlyEmbed({ badgeId, title, eager = false }) {
-  const embedRef = useRef(null);
+function BadgeEmbed({ embedCode, title, eager = false }) {
+  const containerRef = useRef(null);
   const [shouldLoad, setShouldLoad] = useState(eager);
 
   useEffect(() => {
-    if (eager || !embedRef.current || typeof IntersectionObserver === "undefined") {
+    if (eager || !containerRef.current || typeof IntersectionObserver === "undefined") {
       if (!eager && typeof IntersectionObserver === "undefined") setShouldLoad(true);
       return undefined;
     }
@@ -28,52 +20,56 @@ function CredlyEmbed({ badgeId, title, eager = false }) {
           observer.disconnect();
         }
       },
-      { rootMargin: "240px" }
+      { rootMargin: "300px" }
     );
-    observer.observe(embedRef.current);
+
+    observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, [eager]);
 
   useEffect(() => {
-    if (!shouldLoad || !embedRef.current || !badgeId) return undefined;
+    if (!shouldLoad || !containerRef.current || !embedCode) return undefined;
 
-    const container = embedRef.current;
-    container.replaceChildren();
-    const badge = document.createElement("div");
-    badge.dataset.iframeWidth = "180";
-    badge.dataset.iframeHeight = "324";
-    badge.dataset.shareBadgeId = badgeId;
-    badge.dataset.shareBadgeHost = "https://www.credly.com";
-    container.appendChild(badge);
+    const container = containerRef.current;
+    const parsed = new DOMParser().parseFromString(embedCode, "text/html");
+    const scripts = [];
 
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async = true;
-    script.src = "https://cdn.credly.com/assets/utilities/embed.js";
-    container.appendChild(script);
+    Array.from(parsed.body.childNodes).forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === "script") {
+        const source = node.getAttribute("src")?.replace(/^\/\//, "https://");
+        if (!source || !source.startsWith("https://")) return;
 
-    const enforceSize = () => {
-      const iframe = container.querySelector("iframe");
-      if (!iframe) return;
-      iframe.style.setProperty("width", "180px", "important");
-      iframe.style.setProperty("height", "324px", "important");
-      iframe.style.setProperty("display", "block", "important");
-    };
-    const observer = new MutationObserver(enforceSize);
-    observer.observe(container, { childList: true, subtree: true });
-    enforceSize();
+        const script = document.createElement("script");
+        script.src = source;
+        script.async = node.hasAttribute("async");
+        scripts.push(script);
+        container.appendChild(script);
+        return;
+      }
+
+      container.appendChild(document.importNode(node, true));
+    });
 
     return () => {
-      observer.disconnect();
+      scripts.forEach((script) => script.remove());
       container.replaceChildren();
     };
-  }, [badgeId, shouldLoad]);
+  }, [embedCode, shouldLoad]);
 
-  return <div ref={embedRef} aria-label={`${title} Credly badge`} className="flex h-[324px] w-[180px] justify-center overflow-hidden" />;
+  return (
+    <div ref={containerRef} aria-label={title || "Embedded badge"} className="flex h-[324px] w-[180px] items-center justify-center overflow-hidden">
+      {shouldLoad ? (
+        null
+      ) : (
+        <span className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" aria-label="Loading badge" />
+      )}
+    </div>
+  );
 }
 
 export default function Badges({ items = [] }) {
   const [preview, setPreview] = useState(null);
+  const embeddedBadges = items.filter((badge) => badge.embedCode?.trim());
 
   useEffect(() => {
     if (!preview) return undefined;
@@ -82,7 +78,7 @@ export default function Badges({ items = [] }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [preview]);
 
-  if (!items.length) return null;
+  if (!embeddedBadges.length) return null;
 
   return (
     <section id="badges" className="bg-white dark:bg-navy-950 py-16 md:py-24">
@@ -90,37 +86,22 @@ export default function Badges({ items = [] }) {
         <SectionHeading icon={Medal} title="Course Badges" subtitle="Micro-credentials earned along the way" />
 
         <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
-          {items.map((badge, index) => {
-            const Icon = icons[index % icons.length];
-            const embedId = badge.embedId || badgeEmbeds[badge.id];
+          {embeddedBadges.map((badge, index) => {
             const content = (
               <>
                 <div className="group relative flex h-[324px] w-[180px] items-center justify-center overflow-hidden rounded-lg transition-[filter] duration-200 group-hover:brightness-95">
-                  {embedId ? (
-                    <CredlyEmbed badgeId={embedId} title={badge.title} />
-                  ) : (
-                    <Icon className="h-10 w-10 text-accent" />
-                  )}
-                  {embedId && (
-                    <button
-                      type="button"
-                      onClick={() => setPreview({ ...badge, embedId })}
-                      aria-label={`Preview ${badge.title} badge`}
-                      className="absolute inset-0 m-0 cursor-zoom-in border-0 bg-transparent p-0"
-                    >
-                      <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <BadgeEmbed embedCode={badge.embedCode} title="Embedded badge" />
+                  <button
+                    type="button"
+                    onClick={() => setPreview({ ...badge })}
+                    aria-label="Preview embedded badge"
+                    className="absolute inset-0 m-0 cursor-zoom-in border-0 bg-transparent p-0"
+                  >
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
                       <Maximize2 className="h-5 w-5 text-white  opacity-0 transition-opacity group-hover:opacity-100" />
-                      </span>
-                    </button>
-                  )}
+                    </span>
+                  </button>
                 </div>
-                
-                {(badge.issuer || badge.date) && (
-                  <span className="mt-0.5 text-xs text-slate-400 dark:text-slate-500 text-center">
-                    {[badge.issuer, badge.date].filter(Boolean).join(" · ")}
-                  </span>
-                )}
-                
               </>
             );
 
@@ -140,7 +121,7 @@ export default function Badges({ items = [] }) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={`${preview.title} badge preview`}
+          aria-label="Embedded badge preview"
           className="fixed inset-0 z-[60] flex items-center justify-center bg-white/80 p-6 backdrop-blur-md motion-safe:animate-fade-in dark:bg-black/70"
           onClick={() => setPreview(null)}
         >
@@ -154,26 +135,8 @@ export default function Badges({ items = [] }) {
               <X className="h-5 w-5" />
             </button>
             <div className="flex justify-center bg-white/60 dark:bg-white/5">
-                  <CredlyEmbed badgeId={preview.embedId} title={preview.title} eager />
+              <BadgeEmbed embedCode={preview.embedCode} title="Embedded badge" eager />
             </div>
-            <a
-              href={`https://www.credly.com/badges/${preview.embedId}/public_url`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 block text-center text-xs text-slate-600 hover:text-accent dark:text-slate-300 dark:hover:text-white"
-            >
-              Provided by Credly
-            </a>
-            {(preview.credentialUrl || preview.embedId) && (
-              <a
-                href={preview.credentialUrl || `https://www.credly.com/badges/${preview.embedId}/public_url`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-auto mt-4 inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-              >
-                Verify Badge <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
           </div>
         </div>
       )}

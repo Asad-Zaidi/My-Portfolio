@@ -150,72 +150,11 @@
       { "name": "Figma", "icon": "figma" }
     ]
   },
-  "certifications": [
-    {
-      "id": "cert-1",
-      "title": "AI for Brainstorming and Planning",
-      "provider": "Google",
-      "year": "",
-      "image": "",
-      "credentialId": "J0W1PEMJCYHB",
-      "credentialUrl": "https://coursera.org/verify/J0W1PEMJCYHB",
-      "description": "Google course completion certificate focused on AI-powered brainstorming and planning workflows."
-    },
-    {
-      "id": "cert-2",
-      "title": "Google AI Fundamentals",
-      "provider": "Google",
-      "year": "",
-      "image": "",
-      "credentialId": "O2E8E4537KNP",
-      "credentialUrl": "https://coursera.org/verify/O2E8E4537KNP",
-      "description": "Google AI Fundamentals course completion certificate demonstrating foundational understanding of AI concepts."
-    },
-    {
-      "id": "cert-3",
-      "title": "Introduction to Computer",
-      "provider": "Microsoft",
-      "year": "",
-      "image": "",
-      "credentialId": "NN12LE874TFD",
-      "credentialUrl": "https://coursera.org/verify/NN12LE874TFD",
-      "description": "Microsoft course completion certificate covering foundational computer and digital literacy skills."
-    },
-    {
-      "id": "cert-4",
-      "title": "IT Fundamentals for Everyone",
-      "provider": "IBM",
-      "year": "",
-      "image": "",
-      "credentialId": "DOGKFDG3HJ21",
-      "credentialUrl": "https://coursera.org/verify/DOGKFDG3HJ21",
-      "description": "IBM and Coursera-based IT fundamentals certificate covering core digital and technical concepts for everyone."
-    },
-    {
-      "id": "cert-5",
-      "title": "Programming for Everybody (Getting Started with Python)",
-      "provider": "University of Michigan",
-      "year": "",
-      "image": "",
-      "credentialId": "YFDD9DYC5CN6",
-      "credentialUrl": "https://coursera.org/verify/YFDD9DYC5CN6",
-      "description": "University of Michigan course certificate introducing Python programming fundamentals and problem solving."
-    },
-    {
-      "id": "cert-6",
-      "title": "Start Writing Prompts like a Pro",
-      "provider": "Google",
-      "year": "",
-      "image": "",
-      "credentialId": "6VX669Z2GSUT",
-      "credentialUrl": "https://coursera.org/verify/6VX669Z2GSUT",
-      "description": "Google prompt writing and AI interaction course completion certificate focused on effective prompting techniques."
-    }
-  ],
+  "certifications": [],
   "badges": [
-    { "id": "badge-1", "title": "Google AI for Brainstorming and Planning", "issuer": "", "date": "", "image": "", "credentialUrl": "" },
-    { "id": "badge-2", "title": "Google AI Fundamentals", "issuer": "", "date": "", "image": "", "credentialUrl": "" },
-    { "id": "badge-3", "title": "IT Fundamentals for Everyone", "issuer": "", "date": "", "image": "", "credentialUrl": "" }
+    { "id": "badge-1", "embedCode": "" },
+    { "id": "badge-2", "embedCode": "" },
+    { "id": "badge-3", "embedCode": "" }
   ],
   "hobbies": [
     { "id": "hobby-1", "name": "Reading Tech Blogs", "icon": "book-open", "description": "" },

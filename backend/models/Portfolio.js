@@ -158,11 +158,7 @@ const certificationSchema = new Schema(
 const badgeSchema = new Schema(
   {
     id: { type: String, required: true },
-    title: { type: String, default: "" },
-    issuer: { type: String, default: "" },
-    date: { type: String, default: "" },
-    image: { type: String, default: "" },
-    credentialUrl: { type: String, default: "" },
+    embedCode: { type: String, default: "" },
   },
   { _id: false }
 );

@@ -21,9 +21,9 @@ app.use(
 
 app.use(express.json());
 
-if (process.env.NODE_ENV !== "production") {
-    app.use(morgan("dev"));
-}
+// Log completed requests in the compact, colorized format shown in the terminal.
+// Example: GET /api/products 200 427.394 ms - 112486
+app.use(morgan("dev"));
 
 // API information
 app.get("/", (req, res) => {
