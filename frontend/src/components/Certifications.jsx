@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, ChevronLeft, ChevronRight, Award, ExternalLink, X, Maximize2 } from "lucide-react";
+import {
+  LuClipboardList as ClipboardList,
+  LuChevronLeft as ChevronLeft,
+  LuChevronRight as ChevronRight,
+  LuAward as Award,
+  LuExternalLink as ExternalLink,
+  LuX as X,
+  LuMaximize2 as Maximize2,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
@@ -37,7 +45,7 @@ export default function Certifications({ items = [] }) {
   if (!items.length) return null;
 
   const scroll = (dir) => {
-    railRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+    railRef.current?.scrollBy({ left: dir * 320, behavior: "auto" });
   };
 
   return (
@@ -53,7 +61,7 @@ export default function Certifications({ items = [] }) {
                 type="button"
                 onClick={() => scroll(-1)}
                 aria-label="Scroll certifications left"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -61,7 +69,7 @@ export default function Certifications({ items = [] }) {
                 type="button"
                 onClick={() => scroll(1)}
                 aria-label="Scroll certifications right"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -71,13 +79,13 @@ export default function Certifications({ items = [] }) {
 
         <div
           ref={railRef}
-          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory scrollbar-none pb-3 -mx-1 px-1"
+          className="flex gap-5 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-none pb-3 -mx-1 px-1"
         >
           {items.map((item, index) => (
             <Reveal
               key={item.id}
               delay={index * 60}
-              className="group snap-start shrink-0 w-64 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              className="group snap-start shrink-0 w-64 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 shadow-card hover:shadow-card-hover overflow-hidden"
             >
               <button
                 type="button"
@@ -87,8 +95,8 @@ export default function Certifications({ items = [] }) {
               >
                   <CertImage item={item} index={index} />
                   {item.image && (
-                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
-                    <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30">
+                    <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100" />
                   </span>
                 )}
               </button>
@@ -125,7 +133,7 @@ export default function Certifications({ items = [] }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${preview.title} certificate preview`}
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-6 motion-safe:animate-fade-in"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-6"
           onClick={() => setPreview(null)}
         >
           <div className="relative max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>

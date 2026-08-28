@@ -1,4 +1,6 @@
-import { GraduationCap } from "lucide-react";
+import {
+  LuGraduationCap as GraduationCap,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
@@ -31,7 +33,7 @@ export default function Education({ items = [] }) {
                     {item.date}
                   </span>
 
-                  <div className="group h-full rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-5 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+                  <div className="group h-full rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-5 shadow-card hover:shadow-card-hover">
                     <span className="lg:hidden inline-flex mb-3 items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
                       {item.date}
                     </span>

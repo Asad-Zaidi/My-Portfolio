@@ -198,6 +198,7 @@ const options = {
           responses: {
             201: { description: "Message created", content: { "application/json": { schema: { type: "object", properties: { message: { type: "string" }, id: { type: "string" } } } } } },
             400: { description: "Required field missing", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            503: { description: "Message saved but SMTP notification failed", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
           },
         },
         get: {

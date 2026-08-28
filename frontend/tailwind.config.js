@@ -31,35 +31,6 @@ module.exports = {
         "card-hover": "0 16px 40px -12px rgba(37, 99, 235, 0.25)",
         glow: "0 0 60px 10px rgba(59, 130, 246, 0.25)",
       },
-      keyframes: {
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(28px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        blob: {
-          "0%, 100%": { transform: "translate(0px, 0px) scale(1)" },
-          "33%": { transform: "translate(24px, -34px) scale(1.08)" },
-          "66%": { transform: "translate(-18px, 18px) scale(0.94)" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-14px)" },
-        },
-        "spin-slow": {
-          to: { transform: "rotate(360deg)" },
-        },
-      },
-      animation: {
-        "fade-up": "fade-up 0.7s ease-out forwards",
-        "fade-in": "fade-in 0.6s ease-out forwards",
-        blob: "blob 12s infinite ease-in-out",
-        float: "float 6s ease-in-out infinite",
-        "spin-slow": "spin-slow 14s linear infinite",
-      },
     },
   },
   plugins: [],

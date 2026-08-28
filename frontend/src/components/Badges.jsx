@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Medal, X, Maximize2 } from "lucide-react";
+import {
+  LuMedal as Medal,
+  LuX as X,
+  LuMaximize2 as Maximize2,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
@@ -61,7 +65,7 @@ function BadgeEmbed({ embedCode, title, eager = false }) {
       {shouldLoad ? (
         null
       ) : (
-        <span className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" aria-label="Loading badge" />
+        <span className="h-6 w-6 rounded-full border-2 border-accent border-t-transparent" aria-label="Loading badge" />
       )}
     </div>
   );
@@ -85,11 +89,11 @@ export default function Badges({ items = [] }) {
       <div className="container">
         <SectionHeading icon={Medal} title="Course Badges" subtitle="Micro-credentials earned along the way" />
 
-        <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
+        <div className="flex flex-nowrap justify-start gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-3 md:flex-wrap md:justify-center md:overflow-visible md:pb-0">
           {embeddedBadges.map((badge, index) => {
             const content = (
               <>
-                <div className="group relative flex h-[324px] w-[180px] items-center justify-center overflow-hidden rounded-lg transition-[filter] duration-200 group-hover:brightness-95">
+                <div className="group relative flex h-[324px] w-[180px] items-center justify-center overflow-hidden rounded-lg group-hover:brightness-95">
                   <BadgeEmbed embedCode={badge.embedCode} title="Embedded badge" />
                   <button
                     type="button"
@@ -98,7 +102,7 @@ export default function Badges({ items = [] }) {
                     className="absolute inset-0 m-0 cursor-zoom-in border-0 bg-transparent p-0"
                   >
                     <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                      <Maximize2 className="h-5 w-5 text-white  opacity-0 transition-opacity group-hover:opacity-100" />
+                      <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100" />
                     </span>
                   </button>
                 </div>
@@ -122,7 +126,7 @@ export default function Badges({ items = [] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Embedded badge preview"
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-white/80 p-6 backdrop-blur-md motion-safe:animate-fade-in dark:bg-black/70"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-white/80 p-6 backdrop-blur-md dark:bg-black/70"
           onClick={() => setPreview(null)}
         >
           <div className="relative max-w-lg w-full" onClick={(event) => event.stopPropagation()}>

@@ -6,7 +6,7 @@ const asyncHandler = require("../utils/asyncHandler");
 // arrays are replaced wholesale (an admin panel edits/saves a whole list
 // at once, so partial array patches would be ambiguous).
 const OBJECT_KEYS = ["meta", "personal", "hero", "about", "personalInfoCard", "skills", "contact", "resume"];
-const ARRAY_KEYS = ["stats", "education", "experience", "certifications", "badges", "hobbies", "languages", "socials", "nav"];
+const ARRAY_KEYS = ["stats", "education", "experience", "certifications", "blogs", "badges", "hobbies", "languages", "socials", "nav"];
 
 async function getOrCreatePortfolio() {
   let doc = await Portfolio.findOne({ slug: "main" });

@@ -1,5 +1,9 @@
 import { createContext, useCallback, useContext, useRef, useState } from "react";
-import { CheckCircle2, AlertCircle, X } from "lucide-react";
+import {
+  LuCircleCheck as CheckCircle2,
+  LuCircleAlert as AlertCircle,
+  LuX as X,
+} from "react-icons/lu";
 
 const ToastContext = createContext(null);
 let nextId = 1;
@@ -36,7 +40,7 @@ export function ToastProvider({ children }) {
           <div
             key={t.id}
             role="status"
-            className={`flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium shadow-card-hover backdrop-blur-md animate-fade-in ${
+            className={`flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium shadow-card-hover backdrop-blur-md ${
               t.type === "success"
                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                 : "border-red-500/30 bg-red-500/10 text-red-300"
@@ -44,12 +48,7 @@ export function ToastProvider({ children }) {
           >
             {t.type === "success" ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
             <span>{t.message}</span>
-            <button
-              type="button"
-              onClick={() => dismiss(t.id)}
-              className="ml-2 text-current/70 hover:text-current"
-              aria-label="Dismiss notification"
-            >
+            <button type="button" onClick={() => dismiss(t.id)} className="ml-2 text-current/70 hover:text-current" aria-label="Dismiss notification">
               <X className="h-3.5 w-3.5" />
             </button>
           </div>

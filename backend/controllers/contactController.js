@@ -1,5 +1,6 @@
 const Message = require("../models/Message");
 const asyncHandler = require("../utils/asyncHandler");
+const { sendContactNotification } = require("../services/email");
 
 // POST /api/contact — public, called by the Contact section's form.
 const sendMessage = asyncHandler(async (req, res) => {
@@ -9,6 +10,17 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 
   const doc = await Message.create({ name, email, subject, message });
+
+  try {
+    await sendContactNotification({ name, email, subject, message });
+  } catch (err) {
+    console.error("Contact email notification failed:", err.message);
+    return res.status(503).json({
+      message: "Your message was saved, but the email notification could not be sent.",
+      id: doc._id,
+    });
+  }
+
   res.status(201).json({ message: "Message sent successfully.", id: doc._id });
 });
 

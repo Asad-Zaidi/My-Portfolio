@@ -9,8 +9,9 @@ A lightweight, self-contained, and modular **Rich Text Editor & Viewer** package
 ```text
 Rich Text/
 ├── components/
-│   ├── RichTextEditor.jsx    # Feature-complete WYSIWYG editor component
+│   ├── RichTextEditor.jsx    # Feature-complete WYSIWYG editor component with Table & Image ribbons
 │   ├── RichTextViewer.jsx    # Safe HTML viewer with prose typography styling
+│   ├── ImageCropModal.jsx    # Canvas-based visual image cropping tool
 │   └── ToolbarButton.jsx     # Reusable toolbar button component
 ├── utils/
 │   └── sanitizeHtml.js       # Sanitizer, XSS blocker, MS Word paste cleaner, text extraction
@@ -167,12 +168,24 @@ const handleImageUpload = async (file) => {
 - **Fonts**: Font Family & Font Size dropdowns
 - **Inline Styles**: Bold, Italic, Underline, Strikethrough, Subscript ($x_2$), Superscript ($x^2$)
 - **Colors**: Text Color Picker & Background Highlight Picker with quick swatches
-- **Alignment**: Align Left, Center, Right, Justify
-- **Lists & Indent**: Bullet List, Numbered List, Increase Indent
+- **Alignment & Direction**:
+  - Align Left, Center, Right, Justify
+  - Text Direction: **LTR ⮞**, **⮜ RTL**, and **⇄ Auto** with BiDi isolation
+- **Spacing Tools**:
+  - **Line Spacing**: Single (1.0), Tight (1.15), Normal (1.5), Spacious (1.75), Double (2.0), Nastaleeq (2.2), Loose (2.5), Triple (3.0)
+  - **Word Spacing**: Compact (-2px), Tight (-1px), Normal (0px), Relaxed (+2px), Wide (+4px), Loose (+8px)
+- **Lists & Indent**: Bullet List, Numbered List, Hard Line Break, Code Block
 - **Insert Elements**:
   - 🔗 Hyperlink Modal (URL, display text, open in new tab)
   - 🖼️ Image Modal (File upload with progress or direct image URL)
-  - 📊 Table Generator Modal (Custom rows & columns)
+  - ✂️ **MS Word Image Formatting Tools**:
+    - Contextual Picture Format ribbon (auto-appears when image clicked or toggled via toolbar)
+    - **Text Wrapping**: Inline with text, Wrap Left (Float Left), Wrap Right (Float Right), Break Text Center/Left/Right
+    - **Interactive Resizing**: 8-point on-canvas drag handles & dimension inputs with Aspect Ratio Lock (🔒)
+    - **Canvas Cropper**: Interactive crop box, aspect ratio presets (1:1, 16:9, 4:3, 3:2, Free, Circle), rotation & live preview
+    - **Picture Styles & Borders**: Solid/dashed borders, color swatch pickers, corner radius (rounded, circle), drop shadows, and color filters
+    - **Accessibility & SEO**: Alt text and title/caption editor
+  - 📊 Table Generator Modal (Custom rows & columns) & MS Word Table Design Tools
   - ➖ Horizontal Divider
 - **HTML Source Toggle**: One-click switch between visual WYSIWYG editor and raw HTML source code.
 - **Smart Paste**: Automatic cleaning of Microsoft Word and Google Docs clipboard artifacts.

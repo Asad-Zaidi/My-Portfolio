@@ -35,6 +35,7 @@ export const RichTextViewer = ({
     return (
         <div
             className={`prose-theme ${className}`}
+            dir="auto"
             style={style}
             dangerouslySetInnerHTML={{ __html: htmlToRender }}
         />

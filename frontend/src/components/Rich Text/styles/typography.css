@@ -1,5 +1,22 @@
 /* ── Rich Text Prose Styling (Universal HTML Display) ── */
 
+/* Custom Urdu & Nastaleeq Font Declarations */
+@font-face {
+  font-family: 'Jameel Noori Nastaleeq';
+  src: url('../../../assets/fonts/Jameel Noori Nastaleeq .ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Jameel Noori Kasheeda';
+  src: url('../../../assets/fonts/Jameel Noori Kasheeda .ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --rt-primary: var(--primary, #2F6FED);
   --rt-primary-light: color-mix(in srgb, var(--rt-primary) 12%, transparent);
@@ -17,6 +34,41 @@
   line-height: 1.75;
   font-size: 0.95rem;
   word-break: break-word;
+}
+
+/* Nastaleeq line-height & rendering enhancement */
+.prose-theme [style*="Jameel Noori"],
+.prose-theme font[face*="Jameel Noori"],
+.prose-theme [style*="Nastaleeq"],
+.prose-theme font[face*="Nastaleeq"],
+.prose-theme [style*="Kasheeda"],
+.prose-theme font[face*="Kasheeda"] {
+  line-height: 2.2 !important;
+  letter-spacing: 0;
+}
+
+/* Bidirectional & RTL Text Rendering Rules */
+.prose-theme :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, div, span) {
+  unicode-bidi: isolate;
+}
+
+.prose-theme [dir="rtl"],
+.prose-theme :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, div)[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+.prose-theme [dir="ltr"],
+.prose-theme :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, div)[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+}
+
+.prose-theme [dir="auto"],
+.prose-theme :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, div)[dir="auto"] {
+  unicode-bidi: plaintext;
 }
 
 .prose-theme h1 {
@@ -156,8 +208,22 @@
   max-width: 100%;
   height: auto;
   border-radius: 0.75rem;
-  margin: 1rem auto;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.prose-theme img:not([style*="float"]):not([style*="display: inline"]):not([style*="display:inline"]) {
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Float and wrap layout clearing */
+.prose-theme p::after,
+.prose-theme div::after,
+.prose-theme::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .prose-theme hr {

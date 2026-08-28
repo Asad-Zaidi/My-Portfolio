@@ -18,13 +18,13 @@ Modern React frontend backed by an Express/MongoDB API, with protected admin edi
 
 This repository contains the complete portfolio application:
 
-- **Frontend:** Responsive React portfolio with sections for the hero, about, experience, education, skills, certifications, badges, hobbies, languages, and contact.
+- **Frontend:** Responsive React portfolio with sections for the hero, about, experience, education, skills, certifications, badges, hobbies, languages, contact, and blog.
 - **Backend:** Express REST API that serves portfolio content from MongoDB.
 - **Administration:** JWT-protected administrator endpoints for updating portfolio content and managing contact submissions.
 - **Media:** Cloudinary-backed uploads for images and résumé files.
 - **Documentation:** OpenAPI 3 documentation served through Swagger UI.
 
-Portfolio content is stored in one MongoDB document and mirrors the structure of `frontend/src/data/data.json`, allowing the frontend to consume the API response without transformation.
+Portfolio content is stored in one MongoDB document and consumed directly by the frontend through the API.
 
 ## Technology stack
 
@@ -52,7 +52,7 @@ Portfolio content is stored in one MongoDB document and mirrors the structure of
 │   └── server.js        Application entry point
 ├── frontend/
 │   ├── public/           Static assets and web manifest
-│   └── src/              React components, pages, hooks, and data
+│   └── src/              React components, pages, and hooks
 └── README.md
 ```
 

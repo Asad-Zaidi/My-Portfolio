@@ -2,7 +2,7 @@ import { useState } from "react";
 
 /**
  * Photo avatar with a graceful initials fallback — used everywhere a
- * profile image is referenced from data.json but may not be provided.
+ * profile image may not be provided by the portfolio API.
  */
 export default function Avatar({ src, name = "", className = "", initials }) {
   const [failed, setFailed] = useState(false);

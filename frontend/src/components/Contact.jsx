@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Download } from "lucide-react";
+import {
+  LuMail as Mail,
+  LuPhone as Phone,
+  LuMapPin as MapPin,
+  LuSend as Send,
+  LuCircleCheck as CheckCircle2,
+  LuCircleAlert as AlertCircle,
+  LuDownload as Download,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import { submitContactMessage } from "../services/api";
@@ -45,7 +53,7 @@ export default function Contact({ contact, resume }) {
   };
 
   const fieldClass = (field) =>
-    `w-full rounded-lg border bg-white dark:bg-navy-900 px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors ${
+    `w-full rounded-lg border bg-white dark:bg-navy-900 px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/50 ${
       errors[field] ? "border-red-400 dark:border-red-500" : "border-slate-200 dark:border-navy-700"
     }`;
 
@@ -63,7 +71,7 @@ export default function Contact({ contact, resume }) {
               {contact.email && (
                 <a
                   href={`mailto:${contact.email}`}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-4 hover:border-accent/40 transition-colors"
+                  className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-4 hover:border-accent/40"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Mail className="h-5 w-5" />
@@ -77,7 +85,7 @@ export default function Contact({ contact, resume }) {
               {contact.phone && (
                 <a
                   href={`tel:${contact.phone.replace(/\s+/g, "")}`}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-4 hover:border-accent/40 transition-colors"
+                  className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-4 hover:border-accent/40"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Phone className="h-5 w-5" />
@@ -105,7 +113,7 @@ export default function Contact({ contact, resume }) {
               <a
                 href={resume.file}
                 download
-                className="flex items-center justify-between gap-3 rounded-xl border border-dashed border-accent/40 bg-accent/5 p-4 text-sm font-semibold text-accent hover:bg-accent/10 transition-colors"
+                className="flex items-center justify-between gap-3 rounded-xl border border-dashed border-accent/40 bg-accent/5 p-4 text-sm font-semibold text-accent hover:bg-accent/10"
               >
                 Prefer a quick overview? Download my résumé
                 <Download className="h-4 w-4 shrink-0" />
@@ -123,8 +131,8 @@ export default function Contact({ contact, resume }) {
                   color: "#94a3b8",
                 }}
               />
-              <MapPin className="absolute h-5 w-5 text-accent motion-safe:animate-float" style={{ top: "38%", left: "42%" }} />
-              <MapPin className="absolute h-4 w-4 text-accent/60 motion-safe:animate-float [animation-delay:1s]" style={{ top: "55%", left: "62%" }} />
+              <MapPin className="absolute h-5 w-5 text-accent" style={{ top: "38%", left: "42%" }} />
+              <MapPin className="absolute h-4 w-4 text-accent/60" style={{ top: "55%", left: "62%" }} />
             </div>
           </Reveal>
 
@@ -221,7 +229,7 @@ export default function Contact({ contact, resume }) {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 font-semibold text-white hover:bg-accent-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 font-semibold text-white hover:bg-accent-dark disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {status === "submitting" ? "Sending..." : "Send Message"}
                 <Send className="h-4 w-4" />

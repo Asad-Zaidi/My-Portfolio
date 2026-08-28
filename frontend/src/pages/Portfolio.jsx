@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import fallbackData from "../data/data.json";
 import { fetchPortfolio } from "../services/api";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
@@ -28,8 +27,7 @@ function setMetaTag(selector, attr, value) {
 
 export default function Portfolio() {
   // All content lives in MongoDB and is served by the backend at
-  // GET /api/portfolio. `fallbackData` (the old data.json) is kept only as
-  // an offline fallback so the page still renders if the API is unreachable.
+  // GET /api/portfolio.
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -41,9 +39,7 @@ export default function Portfolio() {
         if (!cancelled) setData(res);
       })
       .catch((err) => {
-        console.warn("Falling back to bundled data.json — API request failed:", err.message);
         if (!cancelled) {
-          setData(fallbackData);
           setError(err.message);
         }
       });
@@ -68,6 +64,14 @@ export default function Portfolio() {
     setMetaTag('meta[name="theme-color"]', "content", meta.themeColor);
   }, [meta]);
 
+  if (error && !data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white px-6 text-center text-slate-500 dark:bg-navy-950 dark:text-slate-400">
+        Unable to load portfolio data. Please try again later.
+      </div>
+    );
+  }
+
   if (!data) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white dark:bg-navy-950 text-slate-500 dark:text-slate-400">
@@ -78,12 +82,6 @@ export default function Portfolio() {
 
   return (
     <div className="px-8 bg-white dark:bg-navy-950 text-slate-800 dark:text-slate-200 overflow-x-hidden md:px-32">
-      {error && (
-        <div className="fixed inset-x-0 top-0 z-50 bg-amber-500/90 px-4 py-1.5 text-center text-xs font-medium text-white">
-          Couldn't reach the server — showing offline content.
-        </div>
-      )}
-
       <Navbar personal={personal} nav={nav} resume={resume} />
 
       <main>

@@ -1,18 +1,11 @@
-import useReveal from "../hooks/useReveal";
-
 /**
  * Consistent section header: a small blue icon badge + title (+ optional
  * subtitle and trailing action). Used at the top of every content section.
  */
 export default function SectionHeading({ icon: Icon, title, subtitle, action, align = "left" }) {
-  const [ref, inView] = useReveal();
-
   return (
     <div
-      ref={ref}
-      className={`flex flex-wrap items-start justify-between gap-4 mb-8 md:mb-12 transition-[opacity,transform] duration-300 motion-reduce:transition-none ${
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-      } ${align === "center" ? "flex-col items-center text-center" : ""}`}
+      className={`flex flex-wrap items-start justify-between gap-4 mb-8 md:mb-12 ${align === "center" ? "flex-col items-center text-center" : ""}`}
     >
       <div className="flex items-center gap-3">
         {Icon && (

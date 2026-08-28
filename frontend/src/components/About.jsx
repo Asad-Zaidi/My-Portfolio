@@ -1,16 +1,31 @@
-import { User, Cake, MapPin, Mail, Phone, Flag, CircleCheck, CheckCircle2, LayoutDashboard, Terminal } from "lucide-react";
+import {
+  LuUser as User,
+  LuCake as Cake,
+  LuMapPin as MapPin,
+  LuMail as Mail,
+  LuPhone as Phone,
+  LuFlag as Flag,
+  LuCircleCheck as CircleCheck,
+  LuCircleCheck as CheckCircle2,
+  LuLayoutDashboard as LayoutDashboard,
+  LuTerminal as Terminal,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
-const rowIconMap = {
-  user: User,
-  cake: Cake,
-  "map-pin": MapPin,
-  mail: Mail,
-  phone: Phone,
-  flag: Flag,
-  "circle-check": CircleCheck,
-};
+const rowIcons = [
+  { key: "user", icon: User },
+  { key: "cake", icon: Cake },
+  { key: "map-pin", icon: MapPin },
+  { key: "mail", icon: Mail },
+  { key: "phone", icon: Phone },
+  { key: "flag", icon: Flag },
+  { key: "circle-check", icon: CircleCheck },
+];
+
+function getRowIcon(key) {
+  return rowIcons.find((row) => row.key === key)?.icon || User;
+}
 
 export default function About({ about, personalInfoCard }) {
   if (!about) return null;
@@ -66,7 +81,7 @@ export default function About({ about, personalInfoCard }) {
                     </h3>
                     <dl className="space-y-4">
                       {personalInfoCard.rows.map((row) => {
-                        const Icon = rowIconMap[row.icon] || User;
+                        const Icon = getRowIcon(row.icon);
                         return (
                           <div key={row.label} className="flex min-w-0 items-center gap-3 text-sm">
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">

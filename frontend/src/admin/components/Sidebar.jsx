@@ -1,26 +1,28 @@
 import { NavLink } from "react-router-dom";
 import {
-  LayoutDashboard,
-  Settings,
-  User,
-  Sparkles,
-  Info,
-  IdCard,
-  Wrench,
-  GraduationCap,
-  Briefcase,
-  Award,
-  BadgeCheck,
-  Heart,
-  Languages as LanguagesIcon,
-  BarChart3,
-  Mail,
-  FileText,
-  Share2,
-  Menu as MenuIcon,
-  Inbox,
-  ExternalLink,
-} from "lucide-react";
+  LuLayoutDashboard as LayoutDashboard,
+  LuSettings as Settings,
+  LuUser as User,
+  LuSparkles as Sparkles,
+  LuInfo as Info,
+  LuIdCard as IdCard,
+  LuWrench as Wrench,
+  LuGraduationCap as GraduationCap,
+  LuBriefcase as Briefcase,
+  LuAward as Award,
+  LuBadgeCheck as BadgeCheck,
+  LuHeart as Heart,
+  LuLanguages as LanguagesIcon,
+  LuChartColumn as BarChart3,
+  LuMail as Mail,
+  LuFileText as FileText,
+  LuShare2 as Share2,
+  LuMenu as MenuIcon,
+  LuInbox as Inbox,
+  LuExternalLink as ExternalLink,
+  LuChevronLeft as ChevronLeft,
+  LuChevronRight as ChevronRight,
+} from "react-icons/lu";
 
 const groups = [
   {
@@ -53,6 +55,12 @@ const groups = [
     ],
   },
   {
+    title: "Blog",
+    items: [
+      { to: "/admin/sections/blogs", label: "Blog Posts", icon: FileText },
+    ],
+  },
+  {
     title: "Site",
     items: [
       { to: "/admin/sections/socials", label: "Social Links", icon: Share2 },
@@ -65,33 +73,71 @@ const groups = [
   },
 ];
 
-const linkClass = ({ isActive }) =>
-  `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-    isActive ? "bg-accent/15 text-accent-light" : "text-slate-400 hover:bg-navy-800 hover:text-slate-100"
-  }`;
+export default function Sidebar({ onNavigate, collapsed = false, onToggleCollapse }) {
+  const linkClass = ({ isActive }) =>
+    `flex items-center ${
+      collapsed ? "justify-center p-2.5" : "gap-2.5 px-3 py-2"
+    } rounded-lg text-sm font-medium transition-colors ${
+      isActive
+        ? "bg-accent/10 text-accent font-semibold dark:bg-accent/15 dark:text-accent-light"
+        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-navy-800 dark:hover:text-slate-100"
+    }`;
 
-export default function Sidebar({ onNavigate }) {
   return (
-    <div className="flex h-full flex-col bg-navy-900">
-      <div className="flex h-16 shrink-0 items-center gap-2 border-b border-navy-700 px-5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">A</span>
-        <div className="min-w-0">
-          <div className="truncate text-sm font-bold text-white">Admin Panel</div>
-          <div className="truncate text-[11px] text-slate-500">Portfolio CMS</div>
-        </div>
+    <div className="relative flex h-full flex-col bg-white dark:bg-navy-900">
+      {/* Collapse / Expand Toggle Button (Desktop) */}
+      {onToggleCollapse && (
+        <button
+          type="button"
+          onClick={onToggleCollapse}
+          className="absolute right-0 top-1/2 z-50 hidden h-7 w-7 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white p-0 text-slate-600 shadow-md transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-navy-600 dark:bg-navy-800 dark:text-slate-300 dark:hover:bg-navy-700 dark:hover:text-white focus:outline-none lg:flex"
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
+        </button>
+      )}
+
+      {/* Brand Header */}
+      <div className={`flex h-16 shrink-0 items-center border-b border-slate-200 dark:border-navy-700 ${collapsed ? "justify-center px-2" : "gap-2 px-5"}`}>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white shadow-sm">
+          A
+        </span>
+        {!collapsed && (
+          <div className="min-w-0 transition-opacity duration-200">
+            <div className="truncate text-sm font-bold text-slate-900 dark:text-white">Admin Panel</div>
+            <div className="truncate text-[11px] text-slate-500 dark:text-slate-400">Portfolio CMS</div>
+          </div>
+        )}
       </div>
 
-      <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5 scrollbar-thin">
-        {groups.map((group) => (
+      {/* Navigation */}
+      <nav className={`flex-1 space-y-5 overflow-y-auto ${collapsed ? "px-2 py-4" : "px-3 py-5"} scrollbar-none`}>
+        {groups.map((group, gIdx) => (
           <div key={group.title}>
-            <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-              {group.title}
-            </div>
+            {!collapsed ? (
+              <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                {group.title}
+              </div>
+            ) : (
+              gIdx > 0 && <div className="my-2 border-t border-slate-200 dark:border-navy-800" />
+            )}
             <div className="space-y-0.5">
               {group.items.map((item) => (
-                <NavLink key={item.to} to={item.to} end={item.end} className={linkClass} onClick={onNavigate}>
-                  <item.icon className="h-4 w-4 shrink-0" />
-                  <span className="truncate">{item.label}</span>
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={linkClass}
+                  onClick={onNavigate}
+                  title={collapsed ? item.label : undefined}
+                >
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
               ))}
             </div>
@@ -99,16 +145,22 @@ export default function Sidebar({ onNavigate }) {
         ))}
       </nav>
 
-      <div className="border-t border-navy-700 p-3">
+      {/* Bottom Link */}
+      <div className={`border-t border-slate-200 dark:border-navy-700 ${collapsed ? "p-2" : "p-3"}`}>
         <a
           href="/"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-navy-800 hover:text-slate-100"
+          className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-navy-800 dark:hover:text-slate-100 ${
+            collapsed ? "justify-center p-2.5" : "gap-2.5 px-3 py-2"
+          }`}
+          title={collapsed ? "View live site" : undefined}
         >
-          <ExternalLink className="h-4 w-4 shrink-0" /> View live site
+          <ExternalLink className="h-5 w-5 shrink-0" />
+          {!collapsed && <span>View live site</span>}
         </a>
       </div>
     </div>
   );
 }
+

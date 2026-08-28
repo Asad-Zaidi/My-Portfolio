@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 /**
  * The whole site is a single Portfolio document — there is only ever one
  * portfolio owner, so we don't model this as a multi-tenant collection.
- * Shape mirrors frontend/src/data/data.json 1:1 so the API response can be
+ * Shape matches the frontend portfolio sections so the API response can be
  * dropped straight into the React app without any remapping.
  */
 
@@ -155,6 +155,23 @@ const certificationSchema = new Schema(
   { _id: false }
 );
 
+const blogSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    title: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, trim: true },
+    category: { type: String, default: "General", trim: true },
+    author: { type: String, default: "", trim: true },
+    tags: { type: [String], default: [] },
+    date: { type: String, default: "" },
+    readTime: { type: String, default: "" },
+    excerpt: { type: String, default: "", trim: true },
+    content: { type: String, default: "" },
+    accent: { type: String, default: "from-blue-500/25 via-cyan-400/15 to-transparent" },
+  },
+  { _id: false }
+);
+
 const badgeSchema = new Schema(
   {
     id: { type: String, required: true },
@@ -233,6 +250,7 @@ const portfolioSchema = new Schema(
     experience: { type: [experienceSchema], default: [] },
     skills: { type: skillsSchema, default: () => ({}) },
     certifications: { type: [certificationSchema], default: [] },
+    blogs: { type: [blogSchema], default: [] },
     badges: { type: [badgeSchema], default: [] },
     hobbies: { type: [hobbySchema], default: [] },
     languages: { type: [languageSchema], default: [] },

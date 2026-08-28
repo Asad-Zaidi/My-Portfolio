@@ -1,4 +1,6 @@
-import { Languages as LanguagesIcon } from "lucide-react";
+import {
+  LuLanguages as LanguagesIcon,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import useReveal from "../hooks/useReveal";

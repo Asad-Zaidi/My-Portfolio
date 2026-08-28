@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Reveals its target once it scrolls into the viewport.
  * Returns a ref to attach and a boolean flag to drive entrance classes.
- * Fires only once so re-scrolling past a section doesn't replay the animation.
+ * Fires only once so re-scrolling past a section does not repeat the update.
  */
 export default function useReveal(options = {}) {
   const { threshold = 0.15, rootMargin = "0px 0px -20px 0px" } = options;

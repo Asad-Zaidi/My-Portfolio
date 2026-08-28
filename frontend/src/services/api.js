@@ -1,4 +1,6 @@
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+let portfolioCache = null;
+let portfolioRequest = null;
 
 async function handleResponse(res) {
   const body = await res.json().catch(() => ({}));
@@ -10,8 +12,20 @@ async function handleResponse(res) {
 
 // GET /api/portfolio — everything the site renders comes from this call.
 export async function fetchPortfolio() {
-  const res = await fetch(`${API_URL}/portfolio`);
-  return handleResponse(res);
+  if (portfolioCache) return portfolioCache;
+  if (portfolioRequest) return portfolioRequest;
+
+  portfolioRequest = fetch(`${API_URL}/portfolio`)
+    .then(handleResponse)
+    .then((data) => {
+      portfolioCache = data;
+      return data;
+    })
+    .finally(() => {
+      portfolioRequest = null;
+    });
+
+  return portfolioRequest;
 }
 
 // POST /api/contact — used by the Contact section's form.
@@ -53,7 +67,9 @@ export async function adminPatchPortfolio(token, sectionData) {
     headers: { "Content-Type": "application/json", ...authHeaders(token) },
     body: JSON.stringify(sectionData),
   });
-  return handleResponse(res);
+  const data = await handleResponse(res);
+  portfolioCache = data;
+  return data;
 }
 
 export async function adminGetMessages(token) {

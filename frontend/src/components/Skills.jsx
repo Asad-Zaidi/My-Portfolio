@@ -1,8 +1,37 @@
-import { Cpu } from "lucide-react";
+import {
+  LuCpu as Cpu,
+} from "react-icons/lu";
+import {
+  SiDocker,
+  SiFigma,
+  SiGit,
+  SiMongodb,
+  SiNodedotjs,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiVscodium,
+} from "react-icons/si";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import useReveal from "../hooks/useReveal";
-import { getTechColor, getTechIcon } from "./icons/TechIcons";
+
+const techIcons = [
+  { key: "react", label: "React", icon: SiReact, color: "#61DAFB" },
+  { key: "nodejs", label: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
+  { key: "node", label: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
+  { key: "mongodb", label: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { key: "tailwind", label: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+  { key: "docker", label: "Docker", icon: SiDocker, color: "#2496ED" },
+  { key: "vscode", label: "VS Code", icon: SiVscodium, color: "#007ACC" },
+  { key: "figma", label: "Figma", icon: SiFigma, color: "#F24E1E" },
+  { key: "git", label: "Git", icon: SiGit, color: "#F05032" },
+  { key: "python", label: "Python", icon: SiPython, color: "#3776AB" },
+];
+
+function getTechIcon(key) {
+  return techIcons.find((tech) => tech.key === (key || "").toLowerCase()) || null;
+}
 
 function LanguageBar({ name, percent, delay }) {
   const [ref, inView] = useReveal();
@@ -50,16 +79,16 @@ export default function Skills({ languages = [], tools = [] }) {
             </h3>
             <div className="grid grid-cols-4 gap-3">
               {tools.map((tool) => {
-                const Icon = getTechIcon(tool.icon);
+                const tech = getTechIcon(tool.icon);
                 return (
                   <div
                     key={tool.name}
                     title={tool.name}
-                    className="group flex flex-col items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-700 p-3 hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300"
+                    className="group flex flex-col items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-700 p-3 hover:border-accent/40 hover:shadow-card-hover"
                   >
                     <span className="flex h-9 w-9 items-center justify-center">
-                      {Icon ? (
-                        <Icon className="h-8 w-8" color={getTechColor(tool.icon)} />
+                      {tech ? (
+                        <tech.icon className="h-8 w-8" color={tech.color} />
                       ) : (
                         <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent/10 text-xs font-bold text-accent">
                           {tool.name.slice(0, 2).toUpperCase()}

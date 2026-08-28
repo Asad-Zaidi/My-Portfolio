@@ -1,4 +1,8 @@
-import { Briefcase, MapPin, Calendar } from "lucide-react";
+import {
+  LuBriefcase as Briefcase,
+  LuMapPin as MapPin,
+  LuCalendar as Calendar,
+} from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
@@ -16,7 +20,7 @@ export default function Experience({ items = [] }) {
               {item.logoText}
             </span>
 
-            <div className="rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-5 shadow-card hover:shadow-card-hover transition-shadow duration-300">
+            <div className="rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 p-5 shadow-card hover:shadow-card-hover">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <h3 className="font-bold text-slate-900 dark:text-white">

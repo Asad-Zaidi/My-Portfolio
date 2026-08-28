@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { fetchPortfolio, adminPatchPortfolio } from "../../services/api";
+import { fetchPortfolio, adminPatchPortfolio } from "../services/api";
 import { useAuth } from "./AuthContext";
 
 const PortfolioDataContext = createContext(null);
@@ -27,8 +27,6 @@ export function PortfolioDataProvider({ children }) {
     refetch();
   }, [refetch]);
 
-  // Saves one or more top-level sections and merges the server's response
-  // (the source of truth) back into local state.
   const saveSection = useCallback(
     async (sectionData) => {
       const updated = await adminPatchPortfolio(token, sectionData);
