@@ -1,7 +1,5 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import {
-  LuLoaderCircle as Loader2,
-} from "react-icons/lu";
+import { Spokes } from "../components/Spokes";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../admin/components/AdminLayout";
 import Login from "../admin/pages/Login";
@@ -33,8 +31,8 @@ function ProtectedRoute() {
 
 	if (loading) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-navy-950 text-slate-400">
-				<Loader2 className="h-6 w-6" />
+			<div className="flex min-h-screen items-center justify-center bg-navy-950 text-accent">
+				<Spokes className="h-8 w-8" />
 			</div>
 		);
 	}

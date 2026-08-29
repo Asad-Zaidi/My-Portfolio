@@ -18,6 +18,16 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 const router = express.Router();
 
-router.post("/", protect, adminOnly, upload.single("file"), uploadFile);
+router.post(
+  "/",
+  protect,
+  adminOnly,
+  (req, res, next) => {
+    console.log(`\n[Upload] ⏳ [${new Date().toLocaleTimeString()}] Uploading file to Cloudinary...`);
+    next();
+  },
+  upload.single("file"),
+  uploadFile
+);
 
 module.exports = router;

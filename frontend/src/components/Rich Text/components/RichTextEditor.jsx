@@ -5,7 +5,7 @@ import {
     FiRotateCcw, FiRotateCw, FiCode, FiMinus, FiCornerDownLeft,
     FiX, FiDroplet, FiSlash, FiMaximize2, FiMinimize2, FiSave, FiFileText, FiPlus,
     FiTrash2, FiSquare, FiChevronDown, FiLayout, FiCrop, FiSliders,
-    FiLock, FiUnlock, FiLayers, FiCircle, FiRefreshCw, FiEdit3
+    FiLock, FiUnlock, FiLayers, FiRefreshCw, FiEdit3
 } from 'react-icons/fi';
 import { ToolbarButton } from './ToolbarButton';
 import DropDown from '../../DropDown';
@@ -15,16 +15,33 @@ import '../styles/rich-text.css';
 
 const DEFAULT_FONT_FAMILIES = [
     { label: 'Default', name: 'Default', value: 'inherit' },
-    { label: 'Jameel Noori Nastaleeq', name: 'Jameel Noori Nastaleeq', value: "'Jameel Noori Nastaleeq', sans-serif" },
-    { label: 'Jameel Noori Kasheeda', name: 'Jameel Noori Kasheeda', value: "'Jameel Noori Kasheeda', sans-serif" },
-    { label: 'Google Sans', name: 'Google Sans', value: "'Google Sans', sans-serif" },
-    { label: 'Inter', name: 'Inter', value: "'Inter', sans-serif" },
-    { label: 'Arial', name: 'Arial', value: "Arial, Helvetica, sans-serif" },
-    { label: 'Georgia', name: 'Georgia', value: "Georgia, serif" },
-    { label: 'Monospace', name: 'Monospace', value: 'ui-monospace, monospace' },
+    { label: 'Jameel Noori Nastaleeq', name: 'Jameel Noori Nastaleeq', value: 'Jameel Noori Nastaleeq' },
+    { label: 'Jameel Noori Kasheeda', name: 'Jameel Noori Kasheeda', value: 'Jameel Noori Kasheeda' },
+    { label: 'Google Sans', name: 'Google Sans', value: 'Google Sans' },
+    { label: 'Inter', name: 'Inter', value: 'Inter' },
+    { label: 'Arial', name: 'Arial', value: 'Arial' },
+    { label: 'Georgia', name: 'Georgia', value: 'Georgia' },
+    { label: 'Monospace', name: 'Monospace', value: 'monospace' },
 ];
 
 const FONT_SIZE_STEPS = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 72];
+
+const FONT_SIZE_OPTIONS = [
+    { label: '8px', name: '8px', value: '8' },
+    { label: '10px', name: '10px', value: '10' },
+    { label: '12px', name: '12px', value: '12' },
+    { label: '14px', name: '14px', value: '14' },
+    { label: '16px (Normal)', name: '16px (Normal)', value: '16' },
+    { label: '18px', name: '18px', value: '18' },
+    { label: '20px (Urdu Default)', name: '20px (Urdu Default)', value: '20' },
+    { label: '22px', name: '22px', value: '22' },
+    { label: '24px', name: '24px', value: '24' },
+    { label: '28px', name: '28px', value: '28' },
+    { label: '32px', name: '32px', value: '32' },
+    { label: '36px', name: '36px', value: '36' },
+    { label: '48px', name: '48px', value: '48' },
+    { label: '64px', name: '64px', value: '64' },
+];
 
 const FORMAT_BLOCK_OPTIONS = [
     { label: 'Paragraph', value: 'p' },
@@ -177,7 +194,12 @@ export const RichTextEditor = ({
     onSave = null,
     allowFullScreen = true,
     onImageUpload = null,
-    toast = null
+    toast = null,
+    toolbarMode = 'full',
+    singleLine = false,
+    compact = false,
+    showHeadingDropdown = false,
+    showFontSizeDropdown = false,
 }) => {
     const editorRef = useRef(null);
     const editorWrapperRef = useRef(null);
@@ -193,6 +215,17 @@ export const RichTextEditor = ({
     const [saving, setSaving] = useState(false);
     const isInternalChange = useRef(false);
     const savedRangeRef = useRef(null);
+
+    const isCompact = compact || singleLine || toolbarMode === 'fontOnly' || parseInt(minHeight, 10) <= 100;
+
+    const handleKeyDown = useCallback((e) => {
+        if (singleLine && (e.key === 'Enter' || e.keyCode === 13)) {
+            e.preventDefault();
+            if (editorRef.current) {
+                editorRef.current.blur();
+            }
+        }
+    }, [singleLine]);
 
     // Notification handler
     // Notification handler
@@ -219,6 +252,11 @@ export const RichTextEditor = ({
         }
     }, [onSave, notify]);
 
+    const isRtlFont = useCallback((fontVal) => {
+        if (!fontVal) return false;
+        return /nastaleeq|kasheeda|urdu|arabic|nastaliq|amiri|scheherazade|rubik|jameel/i.test(fontVal);
+    }, []);
+
     // Keep state synchronized with external prop
     useEffect(() => {
         if (editorRef.current && !isInternalChange.current) {
@@ -226,10 +264,38 @@ export const RichTextEditor = ({
             if (currentHtml !== value) {
                 editorRef.current.innerHTML = value || '';
             }
+            if (value && (isRtlText(value) || isRtlFont(value))) {
+                editorRef.current.setAttribute('dir', 'rtl');
+                if (!editorRef.current.style.textAlign) {
+                    editorRef.current.style.textAlign = 'right';
+                }
+            }
+
+            // Detect initial font size & family from existing content
+            setTimeout(() => {
+                if (editorRef.current) {
+                    const firstEl = editorRef.current.querySelector('[style*="font-size"]') || editorRef.current.firstElementChild || editorRef.current;
+                    if (firstEl) {
+                        if (firstEl.style && firstEl.style.fontSize) {
+                            const parsed = parseInt(firstEl.style.fontSize, 10);
+                            if (!isNaN(parsed) && parsed > 0) setFontSizePx(parsed);
+                        } else {
+                            const comp = Math.round(parseFloat(window.getComputedStyle(firstEl).fontSize));
+                            if (!isNaN(comp) && comp > 0) setFontSizePx(comp);
+                        }
+
+                        // Also check font family
+                        const fontEl = firstEl.closest ? firstEl.closest('font[face]') : null;
+                        if (fontEl && fontEl.getAttribute('face')) {
+                            setSelectedFont(fontEl.getAttribute('face'));
+                        }
+                    }
+                }
+            }, 50);
         }
         setSourceValue(value || '');
         isInternalChange.current = false;
-    }, [value]);
+    }, [value, isRtlFont]);
 
     const updateContent = useCallback(() => {
         if (!editorRef.current) return;
@@ -237,8 +303,20 @@ export const RichTextEditor = ({
         const clean = sanitizeHtml(rawHtml);
         isInternalChange.current = true;
         setSourceValue(clean);
+
+        // Auto-detect Urdu / Arabic typing or RTL font and align RTL automatically
+        const text = editorRef.current.textContent || '';
+        if (isRtlText(text) || isRtlFont(selectedFont)) {
+            if (editorRef.current.getAttribute('dir') !== 'rtl') {
+                editorRef.current.setAttribute('dir', 'rtl');
+            }
+            if (!editorRef.current.style.textAlign || editorRef.current.style.textAlign === 'left') {
+                editorRef.current.style.textAlign = 'right';
+            }
+        }
+
         if (onChange) onChange(clean);
-    }, [onChange]);
+    }, [onChange, selectedFont, isRtlFont]);
 
     // Intelligent Clipboard Paste Handler with Automatic RTL/LTR Detection
     const handlePaste = useCallback((e) => {
@@ -248,6 +326,13 @@ export const RichTextEditor = ({
 
         const html = clipboardData.getData('text/html');
         const plainText = clipboardData.getData('text/plain');
+
+        if (singleLine) {
+            const cleanText = (plainText || stripHtml(html) || '').replace(/[\r\n]+/g, ' ');
+            document.execCommand('insertText', false, cleanText);
+            updateContent();
+            return;
+        }
 
         if (html) {
             let cleaned = cleanWordHtml(html);
@@ -298,27 +383,42 @@ export const RichTextEditor = ({
         }
 
         updateContent();
-    }, [updateContent]);
+    }, [updateContent, singleLine]);
 
     // Text Direction (LTR / RTL / Auto) setter for blocks
     const setTextDirection = useCallback((dir) => {
         const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0) return;
 
-        let node = sel.anchorNode;
-        while (node && node !== editorRef.current) {
-            if (node.nodeType === Node.ELEMENT_NODE && /^(P|H[1-6]|DIV|LI|BLOCKQUOTE)$/i.test(node.tagName)) {
-                if (dir === 'auto') {
-                    node.setAttribute('dir', 'auto');
-                    node.style.textAlign = '';
-                } else {
-                    node.setAttribute('dir', dir);
-                    node.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+        if (sel && sel.rangeCount > 0) {
+            let node = sel.anchorNode;
+            while (node && node !== editorRef.current) {
+                if (node.nodeType === Node.ELEMENT_NODE && /^(P|H[1-6]|DIV|LI|BLOCKQUOTE|SPAN)$/i.test(node.tagName)) {
+                    if (dir === 'auto') {
+                        node.setAttribute('dir', 'auto');
+                        node.style.textAlign = '';
+                    } else {
+                        node.setAttribute('dir', dir);
+                        node.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+                    }
+                    updateContent();
+                    return;
                 }
-                updateContent();
-                return;
+                node = node.parentNode;
             }
-            node = node.parentNode;
+        }
+
+        if (singleLine || toolbarMode === 'fontOnly') {
+            if (editorRef.current) {
+                if (dir === 'auto') {
+                    editorRef.current.setAttribute('dir', 'auto');
+                    editorRef.current.style.textAlign = '';
+                } else {
+                    editorRef.current.setAttribute('dir', dir);
+                    editorRef.current.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+                }
+            }
+            updateContent();
+            return;
         }
 
         if (editorRef.current) {
@@ -336,7 +436,7 @@ export const RichTextEditor = ({
                 target = target.parentNode;
             }
         }
-    }, [updateContent]);
+    }, [updateContent, singleLine, toolbarMode]);
 
     // Line Spacing handler
     const handleLineSpacing = useCallback((val) => {
@@ -377,7 +477,7 @@ export const RichTextEditor = ({
 
         let node = sel.anchorNode;
         while (node && node !== editorRef.current) {
-            if (node.nodeType === Node.ELEMENT_NODE && /^(P|H[1-6]|DIV|LI|BLOCKQUOTE|SPAN)$/i.test(node.tagName)) {
+            if (node.nodeType === Node.ELEMENT_NODE && /^(P|H[1-6]|DIV|LI|BLOCKQUOTE|TABLE)$/i.test(node.tagName)) {
                 node.style.wordSpacing = val === 'normal' ? '' : val;
                 updateContent();
                 return;
@@ -408,6 +508,55 @@ export const RichTextEditor = ({
             let node = sel.getRangeAt(0).commonAncestorContainer;
             if (node.nodeType === 3) node = node.parentNode;
             inTable = Boolean(node && node.closest('table'));
+
+            if (node && editorRef.current.contains(node)) {
+                // 1. Detect Block style (p, h1-h6, blockquote, pre, code)
+                let blockNode = node;
+                while (blockNode && blockNode !== editorRef.current) {
+                    const tag = blockNode.tagName ? blockNode.tagName.toLowerCase() : '';
+                    if (['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'code'].includes(tag)) {
+                        setSelectedBlock(tag === 'code' ? 'code' : tag);
+                        break;
+                    }
+                    blockNode = blockNode.parentNode;
+                }
+
+                // 2. Detect Font Family
+                const fontEl = node.closest ? node.closest('font[face]') : null;
+                if (fontEl && fontEl.getAttribute('face')) {
+                    setSelectedFont(fontEl.getAttribute('face'));
+                } else {
+                    const computedFamily = window.getComputedStyle(node).fontFamily;
+                    const matched = fontFamilies.find(f => f.value !== 'inherit' && computedFamily.toLowerCase().includes(f.label.toLowerCase()));
+                    if (matched) {
+                        setSelectedFont(matched.value);
+                    }
+                }
+
+                // 3. Detect Exact Font Size
+                let currentEl = node;
+                let foundFontSize = null;
+                while (currentEl && currentEl !== editorRef.current) {
+                    if (currentEl.style && currentEl.style.fontSize) {
+                        const parsed = parseInt(currentEl.style.fontSize, 10);
+                        if (!isNaN(parsed) && parsed > 0) {
+                            foundFontSize = parsed;
+                            break;
+                        }
+                    }
+                    currentEl = currentEl.parentNode;
+                }
+
+                if (foundFontSize !== null) {
+                    setFontSizePx(foundFontSize);
+                } else {
+                    const computedSizeStr = window.getComputedStyle(node).fontSize;
+                    const parsedComputed = Math.round(parseFloat(computedSizeStr));
+                    if (!isNaN(parsedComputed) && parsedComputed > 0) {
+                        setFontSizePx(parsedComputed);
+                    }
+                }
+            }
         }
         setIsInTable(inTable);
 
@@ -425,27 +574,70 @@ export const RichTextEditor = ({
             justifyRight: document.queryCommandState('justifyRight'),
             justifyFull: document.queryCommandState('justifyFull'),
         });
-    }, []);
+    }, [fontFamilies]);
 
     // Execute standard formatting commands
     const exec = useCallback((command, val = null) => {
         if (disabled) return;
         document.execCommand(command, false, val);
-        if (editorRef.current) editorRef.current.focus();
+        if (editorRef.current) {
+            if (['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'].includes(command)) {
+                const alignMap = {
+                    justifyLeft: 'left',
+                    justifyCenter: 'center',
+                    justifyRight: 'right',
+                    justifyFull: 'justify'
+                };
+                if (singleLine || toolbarMode === 'fontOnly') {
+                    editorRef.current.style.textAlign = alignMap[command] || '';
+                }
+            }
+            editorRef.current.focus();
+        }
         updateContent();
         checkActiveFormats();
-    }, [disabled, updateContent, checkActiveFormats]);
+    }, [disabled, updateContent, checkActiveFormats, singleLine, toolbarMode]);
 
     // Format Block (Headings, Paragraph, Blockquote, Pre)
     const handleFormatBlock = useCallback((val) => {
         setSelectedBlock(val);
-        if (val === 'p' || val === 'h1' || val === 'h2' || val === 'h3' || val === 'h4' || val === 'h5' || val === 'h6' || val === 'pre' || val === 'blockquote') {
-            exec('formatBlock', `<${val}>`);
-        } else if (val === 'code') {
-            document.execCommand('insertHTML', false, `<code>${window.getSelection()?.toString() || 'code'}</code>`);
-            updateContent();
+        if (!editorRef.current) return;
+        editorRef.current.focus();
+
+        const sel = window.getSelection();
+        const hasSelection = sel && sel.rangeCount > 0 && !sel.isCollapsed && editorRef.current.contains(sel.anchorNode);
+
+        if (hasSelection) {
+            document.execCommand('formatBlock', false, `<${val}>`);
+            document.execCommand('formatBlock', false, val);
+        } else {
+            // Apply to the whole content
+            const currentInner = editorRef.current.innerHTML.trim();
+            const plain = editorRef.current.textContent.trim();
+            if (plain.length > 0) {
+                // Strip existing outermost heading/p/blockquote/pre wrappers
+                const stripped = currentInner
+                    .replace(/^<(h[1-6]|p|blockquote|pre)[^>]*>(.*)<\/\1>$/is, '$2')
+                    .trim();
+
+                if (val === 'p') {
+                    editorRef.current.innerHTML = `<p>${stripped}</p>`;
+                } else if (/^h[1-6]$/i.test(val) || val === 'blockquote' || val === 'pre') {
+                    editorRef.current.innerHTML = `<${val}>${stripped}</${val}>`;
+                } else if (val === 'code') {
+                    editorRef.current.innerHTML = `<code>${stripped}</code>`;
+                }
+            } else {
+                if (val === 'p') {
+                    editorRef.current.innerHTML = `<p><br></p>`;
+                } else if (/^h[1-6]$/i.test(val)) {
+                    editorRef.current.innerHTML = `<${val}><br></${val}>`;
+                }
+            }
         }
-    }, [exec, updateContent]);
+        updateContent();
+        checkActiveFormats();
+    }, [updateContent, checkActiveFormats]);
 
     // Font size custom functions (modifies font-size in-place without nesting spans or adding extra vertical space)
     const applyFontSize = useCallback((size) => {
@@ -838,10 +1030,79 @@ export const RichTextEditor = ({
     const [imgAltText, setImgAltText] = useState('');
     const [imgTitleText, setImgTitleText] = useState('');
 
-    const handleFontName = (val) => {
+    const getFontFamilyCss = useCallback((f) => {
+        if (!f || f === 'inherit') return '';
+        if (f === 'Jameel Noori Nastaleeq' || f.includes('Nastaleeq')) return "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Gulzar', serif";
+        if (f === 'Jameel Noori Kasheeda' || f.includes('Kasheeda')) return "'Jameel Noori Kasheeda', 'Noto Nastaliq Urdu', 'Gulzar', serif";
+        if (f === 'Google Sans' || f.includes('Google Sans')) return "'Google Sans', sans-serif";
+        if (f === 'Inter' || f.includes('Inter')) return "'Inter', sans-serif";
+        if (f === 'Arial' || f.includes('Arial')) return "Arial, Helvetica, sans-serif";
+        if (f === 'Georgia' || f.includes('Georgia')) return "Georgia, serif";
+        if (f === 'monospace' || f.includes('monospace') || f.includes('Monospace')) return "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+        return f;
+    }, []);
+
+    const handleFontName = useCallback((val) => {
         setSelectedFont(val);
-        exec('fontName', val);
-    };
+        if (!editorRef.current) return;
+        editorRef.current.focus();
+
+        const rtl = isRtlFont(val);
+        const fontCss = getFontFamilyCss(val);
+
+        const sel = window.getSelection();
+        const hasSelection = sel && sel.rangeCount > 0 && !sel.isCollapsed && editorRef.current.contains(sel.anchorNode);
+
+        if (hasSelection) {
+            document.execCommand('fontName', false, val);
+            if (fontCss) {
+                const fontEls = editorRef.current.querySelectorAll(`font[face="${val}"], font[face*="${val}"]`);
+                fontEls.forEach((el) => {
+                    el.style.fontFamily = fontCss;
+                    if (rtl) {
+                        el.setAttribute('dir', 'rtl');
+                    }
+                });
+            }
+        } else {
+            // Apply font to whole field
+            const plain = editorRef.current.textContent.trim();
+            const currentInner = editorRef.current.innerHTML.trim();
+
+            if (val === 'inherit') {
+                editorRef.current.style.fontFamily = '';
+                if (!isRtlText(plain)) {
+                    editorRef.current.setAttribute('dir', 'ltr');
+                    editorRef.current.style.textAlign = '';
+                }
+            } else {
+                editorRef.current.style.fontFamily = fontCss;
+                if (rtl) {
+                    editorRef.current.setAttribute('dir', 'rtl');
+                    editorRef.current.style.textAlign = 'right';
+                } else if (!isRtlText(plain)) {
+                    editorRef.current.setAttribute('dir', 'ltr');
+                    editorRef.current.style.textAlign = 'left';
+                }
+
+                if (plain.length > 0) {
+                    const cleanHtml = currentInner
+                        .replace(/^<span[^>]*style="[^"]*font-family[^"]*"[^>]*>(.*)<\/span>$/is, '$1')
+                        .replace(/^<font[^>]*>(.*)<\/font>$/is, '$1');
+                    const dirAttr = rtl ? ` dir="rtl" style="font-family: ${fontCss}; text-align: right;"` : ` style="font-family: ${fontCss};"`;
+                    editorRef.current.innerHTML = `<span${dirAttr}>${cleanHtml}</span>`;
+                }
+            }
+        }
+
+        if (rtl) {
+            setTextDirection('rtl');
+        } else if (val !== 'inherit' && !isRtlText(editorRef.current.textContent)) {
+            setTextDirection('ltr');
+        }
+
+        updateContent();
+    }, [updateContent, isRtlFont, setTextDirection, getFontFamilyCss]);
 
     // Overlay position calculation relative to editor container
     const updateImgOverlayRect = useCallback(() => {
@@ -1574,12 +1835,100 @@ export const RichTextEditor = ({
             )}
 
             {/* Editor Toolbar */}
-            <div className="rte-toolbar">
-                {/* History */}
-                <div className="rte-toolbar-group">
-                    <ToolbarButton icon={FiRotateCcw} title="Undo (Ctrl+Z)" onClick={() => exec('undo')} disabled={disabled} />
-                    <ToolbarButton icon={FiRotateCw} title="Redo (Ctrl+Y)" onClick={() => exec('redo')} disabled={disabled} />
+            {toolbarMode === 'fontOnly' ? (
+                <div className="rte-toolbar rte-toolbar-compact" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.25rem' }}>
+                    {/* Headings / Block Styles (if enabled for Title) */}
+                    {showHeadingDropdown && (
+                        <div className="rte-toolbar-group" style={{ display: 'flex', alignItems: 'center' }}>
+                            <DropDown
+                                title="Paragraph & Heading Styles"
+                                value={selectedBlock}
+                                onChange={handleFormatBlock}
+                                options={FORMAT_BLOCK_OPTIONS}
+                                disabled={disabled}
+                                size="xs"
+                                className="w-28 sm:w-32"
+                            />
+                        </div>
+                    )}
+
+                    {/* Font Style */}
+                    <div className="rte-toolbar-group" style={{ display: 'flex', alignItems: 'center' }}>
+                        <DropDown
+                            title="Font Style"
+                            value={selectedFont}
+                            onChange={handleFontName}
+                            options={fontFamilies}
+                            disabled={disabled}
+                            size="xs"
+                            className="w-36 sm:w-44"
+                        />
+                    </div>
+
+                    {/* Font Size Dropdown (Optional for Excerpt / Inputs) */}
+                    {showFontSizeDropdown && (
+                        <div className="rte-toolbar-group" style={{ display: 'flex', alignItems: 'center' }}>
+                            <DropDown
+                                title="Font Size"
+                                value={String(fontSizePx)}
+                                onChange={(val) => applyFontSize(val)}
+                                options={FONT_SIZE_OPTIONS}
+                                disabled={disabled}
+                                size="xs"
+                                className="w-28 sm:w-36"
+                            />
+                        </div>
+                    )}
+
+                    {/* Text Alignment */}
+                    <div className="rte-toolbar-group">
+                        <ToolbarButton icon={FiAlignLeft} title="Align Left (Ctrl+L)" active={activeFormats.justifyLeft} onClick={() => exec('justifyLeft')} disabled={disabled} />
+                        <ToolbarButton icon={FiAlignCenter} title="Align Center (Ctrl+E)" active={activeFormats.justifyCenter} onClick={() => exec('justifyCenter')} disabled={disabled} />
+                        <ToolbarButton icon={FiAlignRight} title="Align Right (Ctrl+R)" active={activeFormats.justifyRight} onClick={() => exec('justifyRight')} disabled={disabled} />
+                        <ToolbarButton icon={FiAlignJustify} title="Justify (Ctrl+J)" active={activeFormats.justifyFull} onClick={() => exec('justifyFull')} disabled={disabled} />
+                    </div>
+
+                    {/* Text Direction (LTR / RTL / Auto) */}
+                    <div className="rte-toolbar-group" style={{ borderRight: 'none', marginRight: 0, paddingRight: 0 }}>
+                        <button
+                            type="button"
+                            onClick={() => setTextDirection('ltr')}
+                            disabled={disabled}
+                            className="rte-btn rte-btn-text"
+                            style={{ padding: '0 0.35rem', fontSize: '10px', fontWeight: 700 }}
+                            title="Left-to-Right Text Direction (LTR)"
+                        >
+                            LTR ⮞
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTextDirection('rtl')}
+                            disabled={disabled}
+                            className="rte-btn rte-btn-text"
+                            style={{ padding: '0 0.35rem', fontSize: '10px', fontWeight: 700 }}
+                            title="Right-to-Left Text Direction (RTL) for Urdu / Arabic"
+                        >
+                            ⮜ RTL
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTextDirection('auto')}
+                            disabled={disabled}
+                            className="rte-btn rte-btn-text"
+                            style={{ padding: '0 0.35rem', fontSize: '10px', fontWeight: 700 }}
+                            title="Auto Detect Text Direction (BiDi)"
+                        >
+                            ⇄ Auto
+                        </button>
+                    </div>
                 </div>
+            ) : (
+                <div className="rte-toolbar">
+                    {/* History */}
+                    <div className="rte-toolbar-group">
+                        <ToolbarButton icon={FiRotateCcw} title="Undo (Ctrl+Z)" onClick={() => exec('undo')} disabled={disabled} />
+                        <ToolbarButton icon={FiRotateCw} title="Redo (Ctrl+Y)" onClick={() => exec('redo')} disabled={disabled} />
+                    </div>
 
                 {/* Headings & Typography */}
                 <div className="rte-toolbar-group" style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
@@ -1884,9 +2233,10 @@ export const RichTextEditor = ({
                     )}
                 </div>
             </div>
+            )}
 
             {/* MS Word Table Design Contextual Ribbon Bar - Only shown when table is added */}
-            {hasTableInDoc && (tableDesignOpen || isInTable) && (
+            {toolbarMode !== 'fontOnly' && hasTableInDoc && (tableDesignOpen || isInTable) && (
                 <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-100/95 px-3 py-1.5 dark:border-navy-700 dark:bg-navy-800/95 shadow-inner">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-accent dark:text-accent-light mr-1">
                         <FiLayout className="h-3.5 w-3.5" />
@@ -2072,7 +2422,7 @@ export const RichTextEditor = ({
             )}
 
             {/* MS Word Image Format Contextual Ribbon Bar - Only shown when image is in doc & toggled/selected */}
-            {hasImageInDoc && (imageToolsOpen || selectedImgEl) && (
+            {toolbarMode !== 'fontOnly' && hasImageInDoc && (imageToolsOpen || selectedImgEl) && (
                 <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-100/95 px-3 py-1.5 dark:border-navy-700 dark:bg-navy-800/95 shadow-inner">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-accent dark:text-accent-light mr-1">
                         <FiImage className="h-3.5 w-3.5" />
@@ -2328,18 +2678,22 @@ export const RichTextEditor = ({
                             dir="auto"
                             onClick={handleEditorClick}
                             onInput={updateContent}
+                            onKeyDown={handleKeyDown}
                             onKeyUp={(e) => {
                                 checkActiveFormats();
-                                updateImgOverlayRect();
+                                if (toolbarMode !== 'fontOnly') updateImgOverlayRect();
                             }}
                             onMouseUp={(e) => {
                                 checkActiveFormats();
-                                updateImgOverlayRect();
+                                if (toolbarMode !== 'fontOnly') updateImgOverlayRect();
                             }}
                             onPaste={handlePaste}
                             placeholder={placeholder}
-                            className={`prose-theme rte-editor-surface ${isFullScreen ? 'rte-fullscreen-page' : ''}`}
-                            style={{ minHeight: isFullScreen ? 'calc(100vh - 180px)' : minHeight }}
+                            className={`prose-theme rte-editor-surface ${isCompact ? 'rte-compact' : ''} ${isFullScreen ? 'rte-fullscreen-page' : ''}`}
+                            style={{
+                                minHeight: isFullScreen ? 'calc(100vh - 180px)' : minHeight,
+                                ...(singleLine ? { whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' } : {})
+                            }}
                         />
 
                         {/* Interactive On-Canvas Image Resize Handles & Overlay */}

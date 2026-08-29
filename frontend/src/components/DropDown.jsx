@@ -97,16 +97,15 @@ export default function DropDown({
       >
         <span className="truncate">{displayLabel}</span>
         <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-150 dark:text-slate-500 ${
-            isOpen ? "rotate-180 text-accent dark:text-accent-light" : ""
-          }`}
+          className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-150 dark:text-slate-500 ${isOpen ? "rotate-180 text-accent dark:text-accent-light" : ""
+            }`}
         />
       </button>
 
       {isOpen && (
         <div
           role="listbox"
-          className={`absolute left-0 top-full z-[99999] mt-1 max-h-60 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-2xl outline-none transition-all scrollbar-none dark:border-navy-700 dark:bg-navy-800 ${menuClassName}`}
+          className={`absolute left-0 top-full z-50 mt-1 max-h-40 min-w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-2xl outline-none transition-all scrollbar-none dark:border-navy-700 dark:bg-navy-800 ${menuClassName}`}
           style={{ minWidth: "max-content" }}
         >
           {normalizedOptions.length === 0 ? (
@@ -123,11 +122,10 @@ export default function DropDown({
                   role="option"
                   aria-selected={isSelected}
                   onClick={() => handleSelect(opt.value)}
-                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-1.5 text-left text-xs sm:text-sm font-medium transition-colors ${
-                    isSelected
-                      ? "bg-accent/10 font-semibold text-accent dark:bg-accent/15 dark:text-accent-light"
-                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-navy-700 dark:hover:text-white"
-                  }`}
+                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-1.5 text-left text-xs sm:text-sm font-medium transition-colors ${isSelected
+                    ? "bg-accent/10 font-semibold text-accent dark:bg-accent/15 dark:text-accent-light"
+                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-navy-700 dark:hover:text-white"
+                    }`}
                 >
                   <span className="truncate">{opt.label}</span>
                   {isSelected && (

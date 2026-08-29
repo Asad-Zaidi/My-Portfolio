@@ -61,6 +61,16 @@ export function sanitizeHtml(html) {
                                 child.removeAttribute(attr.name);
                             } else if ((attrName === 'href' || attrName === 'src') && /^\s*javascript:/i.test(attr.value)) {
                                 child.removeAttribute(attr.name);
+                            } else if (attrName === 'style') {
+                                // Strip white-space and forced fixed widths from inline styles so text can wrap
+                                const cleanedStyle = attr.value
+                                    .replace(/white-space\s*:\s*[^;]+;?/gi, '')
+                                    .trim();
+                                if (cleanedStyle) {
+                                    child.setAttribute('style', cleanedStyle);
+                                } else {
+                                    child.removeAttribute('style');
+                                }
                             }
                         }
 
@@ -91,8 +101,14 @@ export function sanitizeHtml(html) {
  */
 export function isRtlText(text) {
     if (!text || typeof text !== 'string') return false;
-    const rtlRegex = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
-    return rtlRegex.test(text);
+    const clean = text.trim();
+    if (!clean) return false;
+    const rtlMatches = clean.match(/[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/g) || [];
+    const ltrMatches = clean.match(/[A-Za-z]/g) || [];
+    // If no Latin letters exist but RTL characters do, it's RTL
+    if (rtlMatches.length > 0 && ltrMatches.length === 0) return true;
+    // For mixed text, check which script is predominant
+    return rtlMatches.length > ltrMatches.length;
 }
 
 /**

@@ -95,12 +95,23 @@ export async function adminDeleteMessage(token, id) {
 
 // POST /api/upload — multipart file upload (images, résumé PDF, etc).
 export async function adminUploadFile(token, file) {
+  const fileName = file?.name || "file";
+  const sizeKb = file?.size ? `${(file.size / 1024).toFixed(2)} KB` : "";
+  console.log(`[Upload] ⏳ Uploading: ${fileName} (${sizeKb})...`);
+
   const formData = new FormData();
   formData.append("file", file);
-  const res = await fetch(`${API_URL}/upload`, {
-    method: "POST",
-    headers: authHeaders(token),
-    body: formData,
-  });
-  return handleResponse(res);
+  try {
+    const res = await fetch(`${API_URL}/upload`, {
+      method: "POST",
+      headers: authHeaders(token),
+      body: formData,
+    });
+    const result = await handleResponse(res);
+    console.log(`[Upload] ✅ Uploaded successfully! URL:`, result.url);
+    return result;
+  } catch (err) {
+    console.error(`[Upload] ❌ Upload failed:`, err.message);
+    throw err;
+  }
 }

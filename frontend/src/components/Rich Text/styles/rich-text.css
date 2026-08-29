@@ -38,6 +38,10 @@
   user-select: none;
 }
 
+.rte-toolbar-compact {
+  padding: 0.35rem 0.625rem;
+}
+
 .rte-toolbar-group {
   display: flex;
   align-items: center;
@@ -118,11 +122,29 @@
   line-height: 1.7;
 }
 
+.rte-editor-surface.rte-compact {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 .rte-editor-surface[placeholder]:empty:before {
   content: attr(placeholder);
   color: #94a3b8;
   pointer-events: none;
   display: block;
+}
+
+.rte-editor-surface[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+.rte-editor-surface[dir="rtl"][placeholder]:empty:before,
+.rte-editor-surface[style*="text-align: right"][placeholder]:empty:before,
+.rte-editor-surface[style*="text-align:right"][placeholder]:empty:before {
+  text-align: right;
+  direction: rtl;
 }
 
 /* Source Code View */

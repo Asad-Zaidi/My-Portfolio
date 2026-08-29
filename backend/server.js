@@ -24,7 +24,8 @@ app.use(
     })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Log completed requests in the compact, colorized format shown in the terminal.
 // Example: GET /api/products 200 427.394 ms - 112486

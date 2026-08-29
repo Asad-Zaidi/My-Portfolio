@@ -162,6 +162,7 @@ const blogSchema = new Schema(
     slug: { type: String, required: true, trim: true },
     category: { type: String, default: "General", trim: true },
     author: { type: String, default: "", trim: true },
+    thumbnail: { type: String, default: "", trim: true },
     tags: { type: [String], default: [] },
     date: { type: String, default: "" },
     readTime: { type: String, default: "" },
