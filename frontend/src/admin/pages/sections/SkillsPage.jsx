@@ -12,6 +12,7 @@ import {
 } from "react-icons/lu";
 import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";
+import { techIcons, getTechIcon } from "../../../components/Skills";
 
 const SECTION_KEY = "skills";
 
@@ -117,7 +118,7 @@ function SaveBar({ dirty, saving, onSave, onDiscard }) {
             disabled={saving}
             className="flex items-center gap-1.5 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {saving ? <Loader2 className="h-3.5 w-3.5" /> : <Save className="h-3.5 w-3.5" />}
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
@@ -134,16 +135,15 @@ export default function SkillsPage() {
   const [draft, setDraft] = useState(() => clone(original) || {});
   const [saving, setSaving] = useState(false);
 
-  // Re-sync the draft when this page mounts (i.e. the admin navigates here).
+  // Re-sync the draft when original data loads or changes.
   useEffect(() => {
     setDraft(clone(original) || {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [original]);
 
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center py-24 text-slate-500">
-        <Loader2 className="h-6 w-6" />
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }
@@ -187,26 +187,86 @@ export default function SkillsPage() {
             items={draft.languages || []}
             onChange={(next) => setField("languages", next)}
             itemLabel="language"
-            makeEmptyItem={() => ({ name: "", percent: 0 })}
-            renderFields={(item, update) => (
-              <>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-slate-300">Name</label>
-                  <input type="text" className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30" value={item.name || ""} onChange={(e) => update("name", e.target.value)} />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-slate-300">Proficiency %</label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                    value={item.percent ?? 0}
-                    onChange={(e) => update("percent", Number(e.target.value))}
-                  />
-                </div>
-              </>
-            )}
+            makeEmptyItem={() => ({ name: "", percent: 0, icon: "" })}
+            renderFields={(item, update) => {
+              const tech = getTechIcon(item.icon || item.name);
+              const isCustom = item.icon && !techIcons.some((t) => t.key.toLowerCase() === (item.icon || "").toLowerCase());
+              return (
+                <>
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-slate-300">Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. JavaScript"
+                      className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                      value={item.name || ""}
+                      onChange={(e) => update("name", e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-slate-300">Icon</label>
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <select
+                          className="w-full appearance-none cursor-pointer rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 pr-8 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                          value={item.icon || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            update("icon", val);
+                            if (!item.name && val) {
+                              const found = getTechIcon(val);
+                              if (found) update("name", found.label);
+                            }
+                          }}
+                        >
+                          <option value="" className="bg-navy-900 text-slate-400">
+                            Auto / Select an icon...
+                          </option>
+                          {techIcons.map((t) => (
+                            <option key={t.key} value={t.key} className="bg-navy-900 text-slate-100">
+                              {t.label} ({t.key})
+                            </option>
+                          ))}
+                          {isCustom && (
+                            <option value={item.icon} className="bg-navy-900 text-amber-300">
+                              {item.icon} (custom)
+                            </option>
+                          )}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                          <ChevronDown className="h-4 w-4" />
+                        </div>
+                      </div>
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-navy-600 bg-navy-900/60"
+                        title={tech ? `${tech.label} (${tech.key})` : item.icon || "No icon selected"}
+                      >
+                        {tech ? (
+                          <tech.icon className="h-5 w-5" style={{ color: tech.color }} />
+                        ) : item.name ? (
+                          <span className="text-xs font-bold text-accent">
+                            {item.name.slice(0, 2).toUpperCase()}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-semibold text-slate-500">—</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="mb-1.5 block text-sm font-medium text-slate-300">Proficiency %</label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                      value={item.percent ?? 0}
+                      onChange={(e) => update("percent", Number(e.target.value))}
+                    />
+                  </div>
+                </>
+              );
+            }}
           />
         </div>
 
@@ -217,18 +277,74 @@ export default function SkillsPage() {
             onChange={(next) => setField("tools", next)}
             itemLabel="tool"
             makeEmptyItem={() => ({ name: "", icon: "" })}
-            renderFields={(item, update) => (
-              <>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-slate-300">Name</label>
-                  <input type="text" className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30" value={item.name || ""} onChange={(e) => update("name", e.target.value)} />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-slate-300">Icon key</label>
-                  <input type="text" className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30" value={item.icon || ""} onChange={(e) => update("icon", e.target.value)} />
-                </div>
-              </>
-            )}
+            renderFields={(item, update) => {
+              const tech = getTechIcon(item.icon);
+              const isCustom = item.icon && !techIcons.some((t) => t.key.toLowerCase() === (item.icon || "").toLowerCase());
+              return (
+                <>
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-slate-300">Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. React"
+                      className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                      value={item.name || ""}
+                      onChange={(e) => update("name", e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-slate-300">Icon</label>
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <select
+                          className="w-full appearance-none cursor-pointer rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 pr-8 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                          value={item.icon || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            update("icon", val);
+                            if (!item.name && val) {
+                              const found = getTechIcon(val);
+                              if (found) update("name", found.label);
+                            }
+                          }}
+                        >
+                          <option value="" className="bg-navy-900 text-slate-400">
+                            Select an icon...
+                          </option>
+                          {techIcons.map((t) => (
+                            <option key={t.key} value={t.key} className="bg-navy-900 text-slate-100">
+                              {t.label} ({t.key})
+                            </option>
+                          ))}
+                          {isCustom && (
+                            <option value={item.icon} className="bg-navy-900 text-amber-300">
+                              {item.icon} (custom)
+                            </option>
+                          )}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                          <ChevronDown className="h-4 w-4" />
+                        </div>
+                      </div>
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-navy-600 bg-navy-900/60"
+                        title={tech ? `${tech.label} (${tech.key})` : item.icon || "No icon selected"}
+                      >
+                        {tech ? (
+                          <tech.icon className="h-5 w-5" style={{ color: tech.color }} />
+                        ) : item.name ? (
+                          <span className="text-xs font-bold text-accent">
+                            {item.name.slice(0, 2).toUpperCase()}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-semibold text-slate-500">—</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              );
+            }}
           />
         </div>
       </div>

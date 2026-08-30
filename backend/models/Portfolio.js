@@ -121,6 +121,7 @@ const skillLanguageSchema = new Schema(
   {
     name: { type: String, required: true },
     percent: { type: Number, default: 0, min: 0, max: 100 },
+    icon: { type: String, default: "" },
   },
   { _id: false }
 );

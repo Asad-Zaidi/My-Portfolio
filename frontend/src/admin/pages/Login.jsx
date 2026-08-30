@@ -99,7 +99,7 @@ export default function Login() {
             disabled={submitting}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting && <Loader2 className="h-4 w-4" />}
+            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
             {submitting ? "Signing in..." : "Sign In"}
           </button>
         </form>

@@ -44,7 +44,7 @@ export default function Dashboard() {
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center py-24 text-slate-500">
-        <Loader2 className="h-6 w-6" />
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }

@@ -3,43 +3,89 @@ import {
 } from "react-icons/lu";
 import {
   SiDocker,
-  SiFigma,
-  SiGit,
   SiMongodb,
-  SiNodedotjs,
-  SiPython,
-  SiReact,
-  SiTailwindcss,
-  SiVscodium,
+  SiPostman,
+  SiTypescript,
+  SiCplusplus,
+  SiC,
+  SiGo,
+  SiPostgresql,
+  SiMysql,
+  SiKotlin,
+  SiDart,
+  SiRuby,
 } from "react-icons/si";
+import { TbBrandCSharp } from "react-icons/tb";
+import { VscVscode } from "react-icons/vsc";
+import { RiTailwindCssFill } from "react-icons/ri";
+import {
+  FaFigma, FaNodeJs, FaReact, FaGitAlt, FaGithub, FaPython, FaJava,
+  FaCss, FaHtml5, FaJs, FaRust, FaFlutter, FaSwift, FaPhp
+}
+  from "react-icons/fa6";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import useReveal from "../hooks/useReveal";
 
-const techIcons = [
-  { key: "react", label: "React", icon: SiReact, color: "#61DAFB" },
-  { key: "nodejs", label: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
-  { key: "node", label: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
+export const techIcons = [
+  // Programming Languages
+  { key: "javascript", label: "JavaScript", icon: FaJs, color: "#F7DF1E" },
+  { key: "typescript", label: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+  { key: "python", label: "Python", icon: FaPython, color: "#3776AB" },
+  { key: "java", label: "Java", icon: FaJava, color: "#ED8B00" },
+  { key: "cplusplus", label: "C++", icon: SiCplusplus, color: "#00599C" },
+  { key: "c", label: "C", icon: SiC, color: "#A8B9CC" },
+  { key: "csharp", label: "C#", icon: TbBrandCSharp, color: "#239120" },
+  { key: "html", label: "HTML5", icon: FaHtml5, color: "#E34F26" },
+  { key: "css", label: "CSS3", icon: FaCss, color: "#663399" },
+  { key: "php", label: "PHP", icon: FaPhp, color: "#777BB4" },
+  { key: "rust", label: "Rust", icon: FaRust, color: "#DEA584" },
+  { key: "go", label: "Go", icon: SiGo, color: "#00ADD8" },
+  { key: "sql", label: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
+  { key: "mysql", label: "MySQL", icon: SiMysql, color: "#4479A1" },
+  { key: "swift", label: "Swift", icon: FaSwift, color: "#F05138" },
+  { key: "kotlin", label: "Kotlin", icon: SiKotlin, color: "#7F52FF" },
+  { key: "dart", label: "Dart", icon: SiDart, color: "#0175C2" },
+  { key: "ruby", label: "Ruby", icon: SiRuby, color: "#CC342D" },
+  { key: "flutter", label: "Flutter", icon: FaFlutter, color: "#02569B" },
+
+  // Frameworks, Libraries & Tools
+  { key: "react", label: "React", icon: FaReact, color: "#61DAFB" },
+  { key: "node", label: "Node.js", icon: FaNodeJs, color: "#5FA04E" },
   { key: "mongodb", label: "MongoDB", icon: SiMongodb, color: "#47A248" },
-  { key: "tailwind", label: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+  { key: "tailwind", label: "Tailwind CSS", icon: RiTailwindCssFill, color: "#06B6D4" },
   { key: "docker", label: "Docker", icon: SiDocker, color: "#2496ED" },
-  { key: "vscode", label: "VS Code", icon: SiVscodium, color: "#007ACC" },
-  { key: "figma", label: "Figma", icon: SiFigma, color: "#F24E1E" },
-  { key: "git", label: "Git", icon: SiGit, color: "#F05032" },
-  { key: "python", label: "Python", icon: SiPython, color: "#3776AB" },
+  { key: "vscode", label: "VS Code", icon: VscVscode, color: "#007ACC" },
+  { key: "figma", label: "Figma", icon: FaFigma, color: "#1ABC9C" },
+  { key: "git", label: "Git", icon: FaGitAlt, color: "#F05032" },
+  { key: "github", label: "GitHub", icon: FaGithub, color: "#000000ff" },
+  { key: "postman", label: "Postman", icon: SiPostman, color: "#FF6C37" },
 ];
 
-function getTechIcon(key) {
-  return techIcons.find((tech) => tech.key === (key || "").toLowerCase()) || null;
+export function getTechIcon(key) {
+  if (!key) return null;
+  const normalized = key.toLowerCase().trim();
+  return (
+    techIcons.find((tech) => tech.key === normalized || tech.label.toLowerCase() === normalized) ||
+    null
+  );
 }
 
-function LanguageBar({ name, percent, delay }) {
+function LanguageBar({ name, percent, delay, icon }) {
   const [ref, inView] = useReveal();
+  const tech = getTechIcon(icon || name);
   return (
     <div ref={ref}>
       <div className="flex items-center justify-between text-sm mb-1.5">
-        <span className="font-medium text-slate-700 dark:text-slate-200">{name}</span>
-        <span className="text-slate-400 dark:text-slate-500 font-medium">{percent}%</span>
+        <div className="flex items-center gap-2 min-w-0">
+          {tech && (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+              <tech.icon className="h-4 w-4" style={{ color: tech.color }} />
+            </span>
+          )}
+          <span className="font-medium text-slate-700 dark:text-slate-200 truncate">{name}</span>
+        </div>
+        <span className="text-slate-400 dark:text-slate-500 font-medium shrink-0 ml-2">{percent}%</span>
       </div>
       <div className="h-2 rounded-full bg-slate-100 dark:bg-navy-700 overflow-hidden">
         <div
@@ -66,7 +112,13 @@ export default function Skills({ languages = [], tools = [] }) {
             </h3>
             <div className="space-y-4">
               {languages.map((lang, index) => (
-                <LanguageBar key={lang.name} name={lang.name} percent={lang.percent} delay={index * 80} />
+                <LanguageBar
+                  key={lang.name || index}
+                  name={lang.name}
+                  icon={lang.icon}
+                  percent={lang.percent}
+                  delay={index * 80}
+                />
               ))}
             </div>
           </Reveal>

@@ -57,7 +57,7 @@ function ImageUploadField({ value, onChange }) {
           onClick={() => inputRef.current?.click()}
           className="flex shrink-0 items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-3 py-2.5 text-xs font-semibold text-slate-200 hover:border-accent/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {uploading ? <Loader2 className="h-3.5 w-3.5" /> : <UploadCloud className="h-3.5 w-3.5" />}
+          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UploadCloud className="h-3.5 w-3.5" />}
           Upload
         </button>
         <input ref={inputRef} type="file" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
@@ -107,7 +107,7 @@ function SaveBar({ dirty, saving, onSave, onDiscard }) {
             disabled={saving}
             className="flex items-center gap-1.5 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {saving ? <Loader2 className="h-3.5 w-3.5" /> : <Save className="h-3.5 w-3.5" />}
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
@@ -124,16 +124,15 @@ export default function MetaPage() {
   const [draft, setDraft] = useState(() => clone(original) || {});
   const [saving, setSaving] = useState(false);
 
-  // Re-sync the draft when this page mounts (i.e. the admin navigates here).
+  // Re-sync the draft when original data loads or changes.
   useEffect(() => {
     setDraft(clone(original) || {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [original]);
 
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center py-24 text-slate-500">
-        <Loader2 className="h-6 w-6" />
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }

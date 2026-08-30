@@ -63,7 +63,7 @@ function ImageUploadField({ value, onChange }) {
           onClick={() => inputRef.current?.click()}
           className="flex shrink-0 items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-3 py-2.5 text-xs font-semibold text-slate-200 hover:border-accent/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {uploading ? <Loader2 className="h-3.5 w-3.5" /> : <UploadCloud className="h-3.5 w-3.5" />}
+          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UploadCloud className="h-3.5 w-3.5" />}
           Upload
         </button>
         <input ref={inputRef} type="file" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
@@ -242,16 +242,19 @@ function CertificationsEditor({ items = [], onChange }) {
 }
 
 function SaveBar({ dirty, saving, onSave, onDiscard }) {
+  if (!dirty) return null;
   return (
-    <div className={`fixed inset-x-0 bottom-0 z-30 transition-all duration-300 lg:pl-[var(--admin-sidebar-w,16rem)] ${dirty ? "translate-y-0" : "translate-y-full"}`}>
-      <div className="mx-auto flex max-w-full items-center justify-between gap-4 border-t border-navy-700 bg-navy-900/95 px-6 py-3.5 backdrop-blur-md shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.5)]">
-        <span className="text-sm font-medium text-amber-300">You have unsaved changes.</span>
+    <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-xl border border-slate-700/80 bg-slate-900/95 px-5 py-3 shadow-2xl backdrop-blur">
+      <div className="flex items-center gap-4">
+        <span className="text-xs font-medium text-slate-300">
+          Unsaved changes
+        </span>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onDiscard}
             disabled={saving}
-            className="flex items-center gap-1.5 rounded-lg border border-navy-600 px-4 py-2 text-sm font-semibold text-slate-300 hover:border-navy-500 hover:text-white disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-700 disabled:opacity-60"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Discard
           </button>
@@ -261,7 +264,7 @@ function SaveBar({ dirty, saving, onSave, onDiscard }) {
             disabled={saving}
             className="flex items-center gap-1.5 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {saving ? <Loader2 className="h-3.5 w-3.5" /> : <Save className="h-3.5 w-3.5" />}
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
@@ -278,16 +281,15 @@ export default function CertificationsPage() {
   const [draft, setDraft] = useState(() => clone(original) || []);
   const [saving, setSaving] = useState(false);
 
-  // Re-sync the draft when this page mounts (i.e. the admin navigates here).
+  // Re-sync the draft when original data loads or changes.
   useEffect(() => {
     setDraft(clone(original) || []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [original]);
 
   if (loading || !data) {
     return (
       <div className="flex items-center justify-center py-24 text-slate-500">
-        <Loader2 className="h-6 w-6" />
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }
