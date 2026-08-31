@@ -12,6 +12,7 @@ import { FaGithub } from "react-icons/fa6";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import { getTechIcon, TechIcon } from "./Skills";
+import { useTheme } from "../context/ThemeContext";
 
 const GRADIENTS = [
   "from-indigo-600 via-purple-600 to-pink-500",
@@ -36,6 +37,7 @@ function TechBadge({ name }) {
 }
 
 export default function Projects({ items = [] }) {
+  const { dark } = useTheme();
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -157,17 +159,39 @@ export default function Projects({ items = [] }) {
                       </div>
                     )}
 
-                    {/* Featured Badge */}
-                    {project.featured && (
-                      <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-accent/90 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-white shadow-md">
-                        <Sparkles className="h-3 w-3" /> Featured
+                    {/* Category Pill (Top Left) */}
+                    {project.category && (
+                      <span
+                        className={`absolute top-3 left-3 z-10 inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold backdrop-blur-md border shadow-sm transition-colors ${
+                          dark
+                            ? "bg-slate-900 text-white border-slate-700"
+                            : "bg-white text-slate-900 border-slate-300"
+                        }`}
+                        style={{
+                          backgroundColor: dark ? "#0f172a" : "#ffffff",
+                          color: dark ? "#f8fafc" : "#0f172a",
+                          borderColor: dark ? "#334155" : "#cbd5e1",
+                        }}
+                      >
+                        {project.category}
                       </span>
                     )}
 
-                    {/* Category Pill */}
-                    {project.category && !project.featured && (
-                      <span className="absolute top-3 left-3 z-10 rounded-full bg-navy-950/70 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-slate-200 ring-1 ring-white/10">
-                        {project.category}
+                    {/* Featured Badge (Top Right) */}
+                    {project.featured && (
+                      <span
+                        className={`absolute top-3 right-3 z-10 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md border shadow-sm transition-colors ${
+                          dark
+                            ? "bg-amber-950/60 text-amber-300 border-amber-700/60"
+                            : "bg-amber-50 text-amber-800 border-amber-300"
+                        }`}
+                        style={{
+                          backgroundColor: dark ? "rgba(120, 53, 15, 0.4)" : "#fffbeb",
+                          color: dark ? "#fef08a" : "#92400e",
+                          borderColor: dark ? "rgba(245, 158, 11, 0.5)" : "#fcd34d",
+                        }}
+                      >
+                        <Sparkles className="h-3 w-3" style={{ color: dark ? "#fef08a" : "#b45309" }} /> Featured
                       </span>
                     )}
                   </div>
@@ -245,12 +269,34 @@ export default function Projects({ items = [] }) {
                 {/* Badges on Modal Banner */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                   {selectedProject.featured && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white shadow-md">
-                      <Sparkles className="h-3.5 w-3.5" /> Featured Project
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md border shadow-sm transition-colors ${
+                        dark
+                          ? "bg-amber-950/60 text-amber-300 border-amber-700/60"
+                          : "bg-amber-50 text-amber-800 border-amber-300"
+                      }`}
+                      style={{
+                        backgroundColor: dark ? "rgba(120, 53, 15, 0.4)" : "#fffbeb",
+                        color: dark ? "#fef08a" : "#92400e",
+                        borderColor: dark ? "rgba(245, 158, 11, 0.5)" : "#fcd34d",
+                      }}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" style={{ color: dark ? "#fef08a" : "#b45309" }} /> Featured Project
                     </span>
                   )}
                   {selectedProject.category && (
-                    <span className="rounded-full bg-navy-950/80 backdrop-blur-md px-3 py-1 text-xs font-medium text-white ring-1 ring-white/15">
+                    <span
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-md border shadow-sm transition-colors ${
+                        dark
+                          ? "bg-slate-900 text-white border-slate-700"
+                          : "bg-white text-slate-900 border-slate-300"
+                      }`}
+                      style={{
+                        backgroundColor: dark ? "#0f172a" : "#ffffff",
+                        color: dark ? "#f8fafc" : "#0f172a",
+                        borderColor: dark ? "#334155" : "#cbd5e1",
+                      }}
+                    >
                       {selectedProject.category}
                     </span>
                   )}

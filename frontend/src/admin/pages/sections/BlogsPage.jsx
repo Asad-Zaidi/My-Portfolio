@@ -621,7 +621,7 @@ function BlogsEditor({ items = [], onChange, onSave }) {
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="rounded-full bg-slate-900/70 backdrop-blur-md px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm">
+                      <span className="card-badge-category inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold backdrop-blur-md">
                         {item.category || "General"}
                       </span>
                     </div>
@@ -632,7 +632,7 @@ function BlogsEditor({ items = [], onChange, onSave }) {
                       <ImageIcon className="h-4 w-4" /> No thumbnail
                     </div>
                     <div className="absolute top-3 left-3">
-                      <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent dark:bg-accent/20 dark:text-accent-light">
+                      <span className="card-badge-category inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold backdrop-blur-md">
                         {item.category || "General"}
                       </span>
                     </div>

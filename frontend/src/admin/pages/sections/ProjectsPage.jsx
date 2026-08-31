@@ -23,6 +23,7 @@ import { adminUploadFile } from "../../../api/api";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";
+import { useTheme } from "../../../context/ThemeContext";
 import { getTechIcon, TechIcon } from "../../../components/Skills";
 
 const SECTION_KEY = "projects";
@@ -155,6 +156,7 @@ function ProjectTechPill({ name }) {
 }
 
 function ProjectsEditor({ items = [], onChange, editingIndex, setEditingIndex, onSave, saving }) {
+  const { dark } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const toast = useToast();
 
@@ -512,17 +514,39 @@ function ProjectsEditor({ items = [], onChange, editingIndex, setEditingIndex, o
                         alt={item.title || "Project preview"}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5">
-                        {item.category && (
-                          <span className="rounded-full bg-slate-900/80 backdrop-blur-md px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm">
+                      {item.category && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm backdrop-blur-md border transition-colors ${
+                              dark
+                                ? "bg-slate-900 text-white border-slate-700"
+                                : "bg-white text-slate-900 border-slate-300"
+                            }`}
+                            style={{
+                              backgroundColor: dark ? "#0f172a" : "#ffffff",
+                              color: dark ? "#f8fafc" : "#0f172a",
+                              borderColor: dark ? "#334155" : "#cbd5e1",
+                            }}
+                          >
                             {item.category}
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                       {item.featured && (
-                        <div className="absolute top-3 right-3">
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/90 backdrop-blur-md px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
-                            <Sparkles className="h-3 w-3" /> Featured
+                        <div className="absolute top-3 right-3 z-10">
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-sm backdrop-blur-md border transition-colors ${
+                              dark
+                                ? "bg-amber-950/60 text-amber-300 border-amber-700/60"
+                                : "bg-amber-50 text-amber-800 border-amber-300"
+                            }`}
+                            style={{
+                              backgroundColor: dark ? "rgba(120, 53, 15, 0.4)" : "#fffbeb",
+                              color: dark ? "#fef08a" : "#92400e",
+                              borderColor: dark ? "rgba(245, 158, 11, 0.5)" : "#fcd34d",
+                            }}
+                          >
+                            <Sparkles className="h-3 w-3" style={{ color: dark ? "#fef08a" : "#b45309" }} /> Featured
                           </span>
                         </div>
                       )}
@@ -530,12 +554,36 @@ function ProjectsEditor({ items = [], onChange, editingIndex, setEditingIndex, o
                   ) : (
                     <div className={`relative h-36 w-full overflow-hidden bg-gradient-to-br ${gradient} p-4 flex flex-col justify-between text-white border-b border-slate-100 dark:border-navy-700/50`}>
                       <div className="flex items-center justify-between gap-2">
-                        <span className="rounded-full bg-black/30 backdrop-blur-md px-2.5 py-0.5 text-xs font-semibold text-white">
-                          {item.category || "Project"}
-                        </span>
+                        {item.category ? (
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm backdrop-blur-md border transition-colors ${
+                              dark
+                                ? "bg-slate-900 text-white border-slate-700"
+                                : "bg-white text-slate-900 border-slate-300"
+                            }`}
+                            style={{
+                              backgroundColor: dark ? "#0f172a" : "#ffffff",
+                              color: dark ? "#f8fafc" : "#0f172a",
+                              borderColor: dark ? "#334155" : "#cbd5e1",
+                            }}
+                          >
+                            {item.category}
+                          </span>
+                        ) : <span />}
                         {item.featured && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-black/30 backdrop-blur-md px-2.5 py-0.5 text-xs font-bold text-amber-300">
-                            <Sparkles className="h-3 w-3" /> Featured
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-sm backdrop-blur-md border transition-colors ${
+                              dark
+                                ? "bg-amber-950/60 text-amber-300 border-amber-700/60"
+                                : "bg-amber-50 text-amber-800 border-amber-300"
+                            }`}
+                            style={{
+                              backgroundColor: dark ? "rgba(120, 53, 15, 0.4)" : "#fffbeb",
+                              color: dark ? "#fef08a" : "#92400e",
+                              borderColor: dark ? "rgba(245, 158, 11, 0.5)" : "#fcd34d",
+                            }}
+                          >
+                            <Sparkles className="h-3 w-3" style={{ color: dark ? "#fef08a" : "#b45309" }} /> Featured
                           </span>
                         )}
                       </div>
