@@ -11,7 +11,7 @@ import {
 } from "react-icons/lu";
 import { usePortfolioData } from "../../context/PortfolioDataContext";
 import { useAuth } from "../../context/AuthContext";
-import { adminGetMessages } from "../../services/api";
+import { adminGetMessages } from "../../api/api";
 
 function StatCard({ icon: Icon, label, value, to }) {
   return (

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { adminLogin, adminGetMe } from "../services/api";
+import { adminLogin, adminGetMe } from "../api/api";
 
 const STORAGE_KEY = "admin_token";
 const AuthContext = createContext(null);

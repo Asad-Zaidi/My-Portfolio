@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { RichTextViewer, stripHtml } from "../components/Rich Text";
-import { fetchPortfolio } from "../services/api";
+import { fetchPortfolio } from "../api/api";
 import { Spokes } from "../components/Spokes";
 
 function formatBlogDate(date) {

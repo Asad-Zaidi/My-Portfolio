@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchPortfolio } from "../services/api";
+import { fetchPortfolio } from "../api/api";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import About from "../components/About";

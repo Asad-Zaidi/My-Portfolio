@@ -12,7 +12,7 @@ import {
   LuCloudUpload as UploadCloud,
   LuExternalLink as ExternalLink,
 } from "react-icons/lu";
-import { adminUploadFile } from "../../../services/api";
+import { adminUploadFile } from "../../../api/api";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";

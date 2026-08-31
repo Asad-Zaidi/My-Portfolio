@@ -6,7 +6,7 @@ import {
   LuMailOpen as MailOpen,
   LuTriangleAlert as AlertTriangle,
 } from "react-icons/lu";
-import { adminGetMessages, adminMarkMessageRead, adminDeleteMessage } from "../../services/api";
+import { adminGetMessages, adminMarkMessageRead, adminDeleteMessage } from "../../api/api";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../components/ToastContext";
 

@@ -10,7 +10,7 @@ import {
 } from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
-import { submitContactMessage } from "../services/api";
+import { submitContactMessage } from "../api/api";
 
 const initialForm = { name: "", email: "", subject: "", message: "" };
 
