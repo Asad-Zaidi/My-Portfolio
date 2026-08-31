@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LuFolderGit2 as FolderGit2,
   LuExternalLink as ExternalLink,
@@ -7,6 +7,8 @@ import {
   LuLayers as Layers,
   LuX as X,
   LuArrowRight as ArrowRight,
+  LuChevronLeft as ChevronLeft,
+  LuChevronRight as ChevronRight,
 } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa6";
 import SectionHeading from "./SectionHeading";
@@ -39,8 +41,13 @@ function TechBadge({ name }) {
 
 export default function Projects({ items = [] }) {
   const { dark } = useTheme();
+  const railRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
+
+  const scroll = (dir) => {
+    railRef.current?.scrollBy({ left: dir * 390, behavior: "smooth" });
+  };
 
   // Close modal on Escape key
   useEffect(() => {
@@ -92,6 +99,26 @@ export default function Projects({ items = [] }) {
           icon={FolderGit2}
           title="Projects"
           subtitle="Featured software engineering & creative work"
+          action={
+            <div className="hidden sm:flex gap-2">
+              <button
+                type="button"
+                onClick={() => scroll(-1)}
+                aria-label="Scroll projects left"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent transition-colors"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll(1)}
+                aria-label="Scroll projects right"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-navy-700 text-slate-500 hover:bg-accent hover:text-white hover:border-accent transition-colors"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          }
         />
 
         {/* Category Filters */}
@@ -113,8 +140,11 @@ export default function Projects({ items = [] }) {
           </div>
         )}
 
-        {/* Projects Grid / Mobile Rail */}
-        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 md:snap-none">
+        {/* Projects Horizontal Rail (Hidden Scrollbar on all screen sizes) */}
+        <div
+          ref={railRef}
+          className="flex items-stretch gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 -mx-4 px-4 sm:-mx-8 sm:px-8 md:-mx-0 md:px-0 scroll-smooth"
+        >
           {filteredItems.map((project, index) => {
             const gradient = GRADIENTS[index % GRADIENTS.length];
 
@@ -122,7 +152,7 @@ export default function Projects({ items = [] }) {
               <Reveal
                 key={project.id || index}
                 delay={index * 100}
-                className="h-full shrink-0 w-[85vw] max-w-[340px] sm:w-[360px] md:w-auto md:max-w-none snap-start md:snap-align-none"
+                className="flex flex-col shrink-0 w-[85vw] max-w-[340px] sm:w-[360px] md:w-[380px] snap-start self-stretch"
               >
                 <div
                   role="button"
@@ -134,11 +164,11 @@ export default function Projects({ items = [] }) {
                       setSelectedProject(project);
                     }
                   }}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-navy-700/80 bg-white dark:bg-navy-800/90 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-card-hover cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+                  className="group flex flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-navy-700/80 bg-white dark:bg-navy-800/90 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-card-hover cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
                   aria-label={`View details for ${project.title}`}
                 >
                   {/* Thumbnail / Header Banner */}
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-navy-900">
+                  <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-slate-100 dark:bg-navy-900">
                     {project.image ? (
                       <LazyImage
                         src={project.image}
@@ -197,19 +227,19 @@ export default function Projects({ items = [] }) {
                     )}
                   </div>
 
-                  {/* Project Body: Title & 3-line Description */}
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white transition-colors group-hover:text-accent">
-                      {project.title}
-                    </h3>
+                  {/* Project Body: Title & Description & Footer */}
+                  <div className="flex flex-1 flex-col justify-between p-6">
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white transition-colors group-hover:text-accent line-clamp-2 min-h-[3.5rem] leading-snug">
+                        {project.title}
+                      </h3>
 
-                    {project.description && (
-                      <p className="mt-2.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                        {project.description}
+                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 min-h-[4.25rem]">
+                        {project.description || ""}
                       </p>
-                    )}
+                    </div>
 
-                    <div className="mt-auto pt-4 flex items-center gap-1.5 text-xs font-semibold text-accent group-hover:translate-x-1 transition-transform">
+                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-navy-700/50 flex items-center gap-1.5 text-xs font-semibold text-accent group-hover:translate-x-1 transition-transform">
                       <span>View details</span>
                       <ArrowRight className="h-3.5 w-3.5" />
                     </div>

@@ -139,12 +139,12 @@ export function PortfolioSkeleton() {
             <Skeleton className="h-7 w-20 rounded-full" />
           </div>
 
-          {/* 3 Project Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* 3 Project Cards Horizontal Rail */}
+          <div className="flex items-stretch gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 -mx-4 px-4 sm:-mx-8 sm:px-8 md:-mx-0 md:px-0">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="overflow-hidden rounded-2xl border border-slate-200/60 dark:border-navy-800 bg-white dark:bg-navy-800/90 shadow-card flex flex-col"
+                className="overflow-hidden rounded-2xl border border-slate-200/60 dark:border-navy-800 bg-white dark:bg-navy-800/90 shadow-card flex flex-col shrink-0 w-[85vw] max-w-[340px] sm:w-[360px] md:w-[380px] snap-start self-stretch"
               >
                 {/* 16:9 Banner */}
                 <Skeleton className="aspect-[16/9] w-full rounded-none" />
