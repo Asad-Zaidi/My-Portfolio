@@ -70,14 +70,14 @@ export default function Projects({ items = [] }) {
     const techArray = Array.isArray(project.technologies)
       ? project.technologies
       : typeof project.technologies === "string"
-      ? project.technologies.split(",").map((s) => s.trim()).filter(Boolean)
-      : [];
+        ? project.technologies.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
 
     const toolsArray = Array.isArray(project.tools)
       ? project.tools
       : typeof project.tools === "string"
-      ? project.tools.split(",").map((s) => s.trim()).filter(Boolean)
-      : [];
+        ? project.tools.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
 
     return Array.from(new Set([...techArray, ...toolsArray])).filter(Boolean);
   };
@@ -99,11 +99,10 @@ export default function Projects({ items = [] }) {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 ${
-                  activeCategory === cat
-                    ? "bg-accent text-white shadow-md shadow-accent/20 scale-105"
-                    : "border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-600 dark:text-slate-300 hover:border-accent/40 hover:text-accent"
-                }`}
+                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 ${activeCategory === cat
+                  ? "bg-accent text-white shadow-md shadow-accent/20 scale-105"
+                  : "border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-600 dark:text-slate-300 hover:border-accent/40 hover:text-accent"
+                  }`}
               >
                 {cat}
               </button>
@@ -111,8 +110,8 @@ export default function Projects({ items = [] }) {
           </div>
         )}
 
-        {/* Projects Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {/* Projects Grid / Mobile Rail */}
+        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 md:snap-none">
           {filteredItems.map((project, index) => {
             const gradient = GRADIENTS[index % GRADIENTS.length];
 
@@ -120,7 +119,7 @@ export default function Projects({ items = [] }) {
               <Reveal
                 key={project.id || index}
                 delay={index * 100}
-                className="h-full"
+                className="h-full shrink-0 w-[85vw] max-w-[340px] sm:w-[360px] md:w-auto md:max-w-none snap-start md:snap-align-none"
               >
                 <div
                   role="button"
@@ -142,7 +141,7 @@ export default function Projects({ items = [] }) {
                         src={project.image}
                         alt={project.title}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient} p-6 relative`}>
@@ -228,7 +227,7 @@ export default function Projects({ items = [] }) {
                   <img
                     src={selectedProject.image}
                     alt={selectedProject.title}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-8 relative">
@@ -312,9 +311,8 @@ export default function Projects({ items = [] }) {
                         href={selectedProject.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 transition hover:border-slate-400 hover:text-slate-900 dark:hover:border-navy-500 dark:hover:text-white min-w-[140px] ${
-                          !selectedProject.liveUrl ? "flex-1" : ""
-                        }`}
+                        className={`inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 transition hover:border-slate-400 hover:text-slate-900 dark:hover:border-navy-500 dark:hover:text-white min-w-[140px] ${!selectedProject.liveUrl ? "flex-1" : ""
+                          }`}
                       >
                         <FaGithub className="h-4 w-4" />
                         <span>Source Code</span>
