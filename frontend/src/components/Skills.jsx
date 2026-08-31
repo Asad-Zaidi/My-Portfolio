@@ -15,9 +15,10 @@ import {
   SiKotlin,
   SiDart,
   SiRuby,
-  SiCloudinary
+  SiCloudinary,
+  SiFastapi
 } from "react-icons/si";
-import { TbBrandCSharp } from "react-icons/tb";
+import { TbBrandCSharp, TbBrandReactNative } from "react-icons/tb";
 import { VscVscode } from "react-icons/vsc";
 import { RiTailwindCssFill } from "react-icons/ri";
 import {
@@ -50,11 +51,13 @@ export const techIcons = [
   { key: "dart", label: "Dart", icon: SiDart, color: "#0175C2" },
   { key: "ruby", label: "Ruby", icon: SiRuby, color: "#CC342D" },
   { key: "flutter", label: "Flutter", icon: FaFlutter, color: "#02569B" },
-  { key: "express", label: "Express", icon: SiExpress, adaptive: true },
-  { key: "cloudinary", label: "Cloudinary", icon: SiCloudinary, color: "#3448C5" },
 
   // Frameworks, Libraries & Tools
+  { key: "express", label: "Express", icon: SiExpress, adaptive: true },
+  { key: "cloudinary", label: "Cloudinary", icon: SiCloudinary, color: "#3448C5" },
+  { key: "fastapi", label: "FastAPI", icon: SiFastapi, color: "#009688" },
   { key: "react", label: "React", icon: FaReact, color: "#61DAFB" },
+  { key: "reactnative", label: "React Native", icon: TbBrandReactNative, color: "#0081A3" },
   { key: "node", label: "Node.js", icon: FaNodeJs, color: "#5FA04E" },
   { key: "mongodb", label: "MongoDB", icon: SiMongodb, color: "#47A248" },
   { key: "tailwind", label: "Tailwind CSS", icon: RiTailwindCssFill, color: "#06B6D4" },

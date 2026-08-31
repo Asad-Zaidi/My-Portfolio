@@ -7,12 +7,12 @@ import {
   LuAward as Award,
   LuInbox as Inbox,
   LuArrowUpRight as ArrowUpRight,
-  LuLoaderCircle as Loader2,
   LuClock as Clock,
 } from "react-icons/lu";
 import { usePortfolioData } from "../../context/PortfolioDataContext";
 import { useAuth } from "../../context/AuthContext";
 import { adminGetMessages } from "../../api/api";
+import { AdminDashboardSkeleton } from "../components/AdminSkeleton";
 
 function StatCard({ icon: Icon, label, value, to }) {
   return (
@@ -43,11 +43,7 @@ export default function Dashboard() {
   }, [token]);
 
   if (loading || !data) {
-    return (
-      <div className="flex items-center justify-center py-24 text-slate-500">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </div>
-    );
+    return <AdminDashboardSkeleton />;
   }
 
   return (

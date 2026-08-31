@@ -10,6 +10,7 @@ import {
 } from "react-icons/lu";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import LazyImage from "./ui/LazyImage";
 
 const gradients = [
   "from-blue-500 to-indigo-600",
@@ -22,7 +23,14 @@ const gradients = [
 
 function CertImage({ item, index }) {
   if (item.image) {
-    return <img src={item.image} alt={item.title} loading="lazy" className="h-full w-full object-cover" />;
+    return (
+      <LazyImage
+        src={item.image}
+        alt={item.title}
+        containerClassName="h-full w-full"
+        className="h-full w-full object-cover"
+      />
+    );
   }
   return (
     <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradients[index % gradients.length]}`}>

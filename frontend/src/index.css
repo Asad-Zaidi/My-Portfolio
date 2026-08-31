@@ -271,3 +271,53 @@ body.dark .card-badge-featured *,
 body.dark .card-badge-featured svg {
     color: #fef08a !important;
 }
+
+/* ==========================================================================
+   Skeleton Shimmer Loading System (Light & Dark Theme Consistent)
+   ========================================================================== */
+
+@keyframes skeleton-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.skeleton-shimmer-layer {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: skeleton-shimmer 1.8s infinite ease-in-out;
+}
+
+.dark .skeleton-shimmer-layer,
+html.dark .skeleton-shimmer-layer,
+body.dark .skeleton-shimmer-layer {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+}
+
+.skeleton-pulse {
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.55;
+    }
+}

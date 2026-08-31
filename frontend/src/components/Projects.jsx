@@ -13,6 +13,7 @@ import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import { getTechIcon, TechIcon } from "./Skills";
 import { useTheme } from "../context/ThemeContext";
+import LazyImage from "./ui/LazyImage";
 
 const GRADIENTS = [
   "from-indigo-600 via-purple-600 to-pink-500",
@@ -139,10 +140,10 @@ export default function Projects({ items = [] }) {
                   {/* Thumbnail / Header Banner */}
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-navy-900">
                     {project.image ? (
-                      <img
+                      <LazyImage
                         src={project.image}
                         alt={project.title}
-                        loading="lazy"
+                        containerClassName="h-full w-full"
                         className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
@@ -248,9 +249,10 @@ export default function Projects({ items = [] }) {
               {/* Modal Image Banner */}
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-navy-950">
                 {selectedProject.image ? (
-                  <img
+                  <LazyImage
                     src={selectedProject.image}
                     alt={selectedProject.title}
+                    containerClassName="h-full w-full"
                     className="h-full w-full object-contain"
                   />
                 ) : (

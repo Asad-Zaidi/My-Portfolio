@@ -11,7 +11,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { RichTextViewer, stripHtml } from "../components/Rich Text";
 import { fetchPortfolio } from "../api/api";
-import { Spokes } from "../components/Spokes";
+import LazyImage from "../components/ui/LazyImage";
+import BlogDetailSkeleton from "../components/skeletons/BlogDetailSkeleton";
 
 function formatBlogDate(date) {
   return new Intl.DateTimeFormat("en", {
@@ -29,10 +30,11 @@ function PostHeroBanner({ post }) {
     <div className="relative min-h-[380px] sm:min-h-[460px] md:min-h-[520px] lg:min-h-[580px] w-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl flex items-center justify-center text-center p-6 sm:p-10 lg:p-16 border border-slate-200/60 dark:border-navy-700/60">
       {/* Background Cover Image or Accent Graphic */}
       {hasThumbnail ? (
-        <img
+        <LazyImage
           src={post.thumbnail}
           alt={stripHtml(post.title || "Blog cover")}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          containerClassName="absolute inset-0 h-full w-full"
+          className="h-full w-full object-cover object-center"
         />
       ) : (
         <div className={`absolute inset-0 bg-gradient-to-br ${accent}`}>
@@ -127,11 +129,7 @@ export default function BlogDetail() {
   }
 
   if (!data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-white dark:bg-navy-950 text-accent">
-        <Spokes className="h-9 w-9" />
-      </div>
-    );
+    return <BlogDetailSkeleton />;
   }
 
   const { personal, nav, resume } = data;

@@ -13,7 +13,7 @@ import Hobbies from "../components/Hobbies";
 import Languages from "../components/Languages";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import { Spokes } from "../components/Spokes";
+import PortfolioSkeleton from "../components/skeletons/PortfolioSkeleton";
 
 function setMetaTag(selector, attr, value) {
   if (!value) return;
@@ -75,11 +75,7 @@ export default function Portfolio() {
   }
 
   if (!data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-white dark:bg-navy-950 text-accent">
-        <Spokes className="h-9 w-9" />
-      </div>
-    );
+    return <PortfolioSkeleton />;
   }
 
   return (

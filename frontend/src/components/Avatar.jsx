@@ -1,11 +1,13 @@
 import { useState } from "react";
+import Skeleton from "./ui/Skeleton";
 
 /**
- * Photo avatar with a graceful initials fallback — used everywhere a
- * profile image may not be provided by the portfolio API.
+ * Photo avatar with lazy loading, skeleton shimmer, and graceful initials fallback.
  */
 export default function Avatar({ src, name = "", className = "", initials }) {
+  const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+
   const computedInitials =
     initials ||
     name
@@ -18,13 +20,28 @@ export default function Avatar({ src, name = "", className = "", initials }) {
 
   if (src && !failed) {
     return (
-      <img
-        src={src}
-        alt={name ? `Portrait of ${name}` : "Profile photo"}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className={`object-cover ${className}`}
-      />
+      <div className={`relative overflow-hidden ${className}`}>
+        {!loaded && (
+          <Skeleton
+            variant="rectangular"
+            className="absolute inset-0 h-full w-full"
+          />
+        )}
+        <img
+          src={src}
+          alt={name ? `Portrait of ${name}` : "Profile photo"}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setFailed(true);
+            setLoaded(true);
+          }}
+          className={`h-full w-full object-cover transition-opacity duration-300 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </div>
     );
   }
 
@@ -38,3 +55,4 @@ export default function Avatar({ src, name = "", className = "", initials }) {
     </div>
   );
 }
+

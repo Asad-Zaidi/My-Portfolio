@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { RichTextViewer, stripHtml } from "../components/Rich Text";
 import { fetchPortfolio } from "../api/api";
-import { Spokes } from "../components/Spokes";
+import LazyImage from "../components/ui/LazyImage";
+import BlogsSkeleton from "../components/skeletons/BlogsSkeleton";
 
 function formatBlogDate(date) {
   return new Intl.DateTimeFormat("en", {
@@ -21,11 +22,11 @@ function PostArtwork({ post, large = false }) {
   if (post.thumbnail) {
     return (
       <div className={`relative overflow-hidden bg-slate-100 dark:bg-navy-900 ${large ? "h-56" : "h-48"}`}>
-        <img
+        <LazyImage
           src={post.thumbnail}
           alt={stripHtml(post.title || "Blog thumbnail")}
+          containerClassName="h-full w-full"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
         />
       </div>
     );
@@ -101,11 +102,7 @@ export default function Blogs() {
   }
 
   if (!data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-white dark:bg-navy-950 text-accent">
-        <Spokes className="h-9 w-9" />
-      </div>
-    );
+    return <BlogsSkeleton />;
   }
 
   const { personal, nav, resume, blogs: posts = [] } = data;

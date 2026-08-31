@@ -1,88 +1,143 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import { Spokes } from "../components/Spokes";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../admin/components/AdminLayout";
-import Login from "../admin/pages/Login";
-import Dashboard from "../admin/pages/Dashboard";
-import MetaPage from "../admin/pages/sections/MetaPage";
-import PersonalPage from "../admin/pages/sections/PersonalPage";
-import HeroPage from "../admin/pages/sections/HeroPage";
-import AboutPage from "../admin/pages/sections/AboutPage";
-import PersonalInfoCardPage from "../admin/pages/sections/PersonalInfoCardPage";
-import SkillsPage from "../admin/pages/sections/SkillsPage";
-import ContactPage from "../admin/pages/sections/ContactPage";
-import ResumePage from "../admin/pages/sections/ResumePage";
-import StatsPage from "../admin/pages/sections/StatsPage";
-import EducationPage from "../admin/pages/sections/EducationPage";
-import ProjectsPage from "../admin/pages/sections/ProjectsPage";
-import ExperiencePage from "../admin/pages/sections/ExperiencePage";
-import CertificationsPage from "../admin/pages/sections/CertificationsPage";
-import BlogsPage from "../admin/pages/sections/BlogsPage";
-import BadgesPage from "../admin/pages/sections/BadgesPage";
-import HobbiesPage from "../admin/pages/sections/HobbiesPage";
-import LanguagesPage from "../admin/pages/sections/LanguagesPage";
-import SocialsPage from "../admin/pages/sections/SocialsPage";
-import NavPage from "../admin/pages/sections/NavPage";
-import MessagesPage from "../admin/pages/MessagesPage";
-import ChangePasswordPage from "../admin/pages/ChangePasswordPage";
 import { PortfolioDataProvider } from "../context/PortfolioDataContext";
+import {
+  AdminDashboardSkeleton,
+  AdminSectionSkeleton,
+} from "../admin/components/AdminSkeleton";
+import Skeleton from "../components/ui/Skeleton";
+
+// Lazy load admin pages and sections
+const Login = lazy(() => import("../admin/pages/Login"));
+const Dashboard = lazy(() => import("../admin/pages/Dashboard"));
+const MetaPage = lazy(() => import("../admin/pages/sections/MetaPage"));
+const PersonalPage = lazy(() => import("../admin/pages/sections/PersonalPage"));
+const HeroPage = lazy(() => import("../admin/pages/sections/HeroPage"));
+const AboutPage = lazy(() => import("../admin/pages/sections/AboutPage"));
+const PersonalInfoCardPage = lazy(() =>
+  import("../admin/pages/sections/PersonalInfoCardPage")
+);
+const SkillsPage = lazy(() => import("../admin/pages/sections/SkillsPage"));
+const ContactPage = lazy(() => import("../admin/pages/sections/ContactPage"));
+const ResumePage = lazy(() => import("../admin/pages/sections/ResumePage"));
+const StatsPage = lazy(() => import("../admin/pages/sections/StatsPage"));
+const EducationPage = lazy(() =>
+  import("../admin/pages/sections/EducationPage")
+);
+const ProjectsPage = lazy(() => import("../admin/pages/sections/ProjectsPage"));
+const ExperiencePage = lazy(() =>
+  import("../admin/pages/sections/ExperiencePage")
+);
+const CertificationsPage = lazy(() =>
+  import("../admin/pages/sections/CertificationsPage")
+);
+const BlogsPage = lazy(() => import("../admin/pages/sections/BlogsPage"));
+const BadgesPage = lazy(() => import("../admin/pages/sections/BadgesPage"));
+const HobbiesPage = lazy(() => import("../admin/pages/sections/HobbiesPage"));
+const LanguagesPage = lazy(() =>
+  import("../admin/pages/sections/LanguagesPage")
+);
+const SocialsPage = lazy(() => import("../admin/pages/sections/SocialsPage"));
+const NavPage = lazy(() => import("../admin/pages/sections/NavPage"));
+const MessagesPage = lazy(() => import("../admin/pages/MessagesPage"));
+const ChangePasswordPage = lazy(() =>
+  import("../admin/pages/ChangePasswordPage")
+);
 
 function ProtectedRoute() {
-	const { isAuthenticated, loading } = useAuth();
-	const location = useLocation();
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
 
-	if (loading) {
-		return (
-			<div className="flex min-h-screen items-center justify-center bg-navy-950 text-accent">
-				<Spokes className="h-8 w-8" />
-			</div>
-		);
-	}
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-navy-950 p-6">
+        <div className="w-full max-w-md space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-28 w-full" />
+        </div>
+      </div>
+    );
+  }
 
-	if (!isAuthenticated) {
-		return <Navigate to="/admin/login" replace state={{ from: location }} />;
-	}
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" replace state={{ from: location }} />;
+  }
 
-	return <Outlet />;
+  return (
+    <Suspense fallback={<AdminSectionSkeleton />}>
+      <Outlet />
+    </Suspense>
+  );
 }
 
 export default function AdminRoutes() {
-	return (
-		<Routes>
-			<Route path="login" element={<Login />} />
+  return (
+    <Routes>
+      <Route
+        path="login"
+        element={
+          <Suspense
+            fallback={
+              <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-navy-950 p-6">
+                <div className="w-full max-w-md space-y-4">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-40 w-full" />
+                </div>
+              </div>
+            }
+          >
+            <Login />
+          </Suspense>
+        }
+      />
 
-			<Route element={<ProtectedRoute />}>
-				<Route
-					element={
-						<PortfolioDataProvider>
-							<AdminLayout />
-						</PortfolioDataProvider>
-					}
-				>
-					<Route index element={<Dashboard />} />
-					<Route path="sections/meta" element={<MetaPage />} />
-					<Route path="sections/personal" element={<PersonalPage />} />
-					<Route path="sections/hero" element={<HeroPage />} />
-					<Route path="sections/about" element={<AboutPage />} />
-					<Route path="sections/personalInfoCard" element={<PersonalInfoCardPage />} />
-					<Route path="sections/skills" element={<SkillsPage />} />
-					<Route path="sections/contact" element={<ContactPage />} />
-					<Route path="sections/resume" element={<ResumePage />} />
-					<Route path="sections/stats" element={<StatsPage />} />
-					<Route path="sections/education" element={<EducationPage />} />
-					<Route path="sections/projects" element={<ProjectsPage />} />
-					<Route path="sections/experience" element={<ExperiencePage />} />
-					<Route path="sections/certifications" element={<CertificationsPage />} />
-					<Route path="sections/blogs" element={<BlogsPage />} />
-					<Route path="sections/badges" element={<BadgesPage />} />
-					<Route path="sections/hobbies" element={<HobbiesPage />} />
-					<Route path="sections/languages" element={<LanguagesPage />} />
-					<Route path="sections/socials" element={<SocialsPage />} />
-					<Route path="sections/nav" element={<NavPage />} />
-					<Route path="messages" element={<MessagesPage />} />
-					<Route path="change-password" element={<ChangePasswordPage />} />
-				</Route>
-			</Route>
-		</Routes>
-	);
+      <Route element={<ProtectedRoute />}>
+        <Route
+          element={
+            <PortfolioDataProvider>
+              <AdminLayout />
+            </PortfolioDataProvider>
+          }
+        >
+          <Route
+            index
+            element={
+              <Suspense fallback={<AdminDashboardSkeleton />}>
+                <Dashboard />
+              </Suspense>
+            }
+          />
+          <Route path="sections/meta" element={<MetaPage />} />
+          <Route path="sections/personal" element={<PersonalPage />} />
+          <Route path="sections/hero" element={<HeroPage />} />
+          <Route path="sections/about" element={<AboutPage />} />
+          <Route
+            path="sections/personalInfoCard"
+            element={<PersonalInfoCardPage />}
+          />
+          <Route path="sections/skills" element={<SkillsPage />} />
+          <Route path="sections/contact" element={<ContactPage />} />
+          <Route path="sections/resume" element={<ResumePage />} />
+          <Route path="sections/stats" element={<StatsPage />} />
+          <Route path="sections/education" element={<EducationPage />} />
+          <Route path="sections/projects" element={<ProjectsPage />} />
+          <Route path="sections/experience" element={<ExperiencePage />} />
+          <Route
+            path="sections/certifications"
+            element={<CertificationsPage />}
+          />
+          <Route path="sections/blogs" element={<BlogsPage />} />
+          <Route path="sections/badges" element={<BadgesPage />} />
+          <Route path="sections/hobbies" element={<HobbiesPage />} />
+          <Route path="sections/languages" element={<LanguagesPage />} />
+          <Route path="sections/socials" element={<SocialsPage />} />
+          <Route path="sections/nav" element={<NavPage />} />
+          <Route path="messages" element={<MessagesPage />} />
+          <Route path="change-password" element={<ChangePasswordPage />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
