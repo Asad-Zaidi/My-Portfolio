@@ -84,6 +84,100 @@
 
 // module.exports = app;
 
+// const dns = require("dns");
+
+// dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
+// console.log("DNS Servers:", dns.getServers());
+
+// require("dotenv").config();
+
+// const express = require("express");
+// const cors = require("cors");
+// const morgan = require("morgan");
+
+// const connectDB = require("./config/db");
+// const {
+//     notFound,
+//     errorHandler
+// } = require("./middlewares/errorMiddleware");
+
+// const swaggerUi = require("swagger-ui-express");
+// const swaggerSpec = require("./config/swagger");
+
+// const registerRoutes = require("./index");
+
+// const app = express();
+
+// app.use(
+//     cors({
+//         origin:
+//             process.env.CLIENT_URL ||
+//             "http://localhost:3000"
+//     })
+// );
+
+// app.use(express.json({ limit: "50mb" }));
+// app.use(
+//     express.urlencoded({
+//         limit: "50mb",
+//         extended: true
+//     })
+// );
+
+// app.use(morgan("dev"));
+
+// // Root
+// app.get("/", (req, res) => {
+//     res.json({
+//         message: "Backend is running",
+//         status: "success",
+//         version: "1.0.0",
+//         docs: "/docs",
+//         health: "/api/health"
+//     });
+// });
+
+// // Swagger JSON
+// app.get("/docs.json", (req, res) => {
+//     res.json(swaggerSpec);
+// });
+
+// // Swagger UI
+// app.use(
+//     "/docs",
+//     swaggerUi.serve,
+//     swaggerUi.setup(swaggerSpec)
+// );
+
+// // Health check
+// app.get("/api/health", (req, res) => {
+//     res.json({
+//         status: "ok"
+//     });
+// });
+
+// // API routes
+// registerRoutes(app);
+
+// // Error handling
+// app.use(notFound);
+// app.use(errorHandler);
+
+// // Connect MongoDB
+// connectDB()
+//     .then(() => {
+//         console.log("MongoDB connected successfully");
+//     })
+//     .catch((err) => {
+//         console.error(
+//             "Failed to connect to MongoDB:",
+//             err.message
+//         );
+//     });
+
+// module.exports = app;
+
 const dns = require("dns");
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
@@ -97,6 +191,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const connectDB = require("./config/db");
+
 const {
     notFound,
     errorHandler
@@ -109,15 +204,48 @@ const registerRoutes = require("./index");
 
 const app = express();
 
+
+// ===============================
+// CORS
+// ===============================
+
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://asadzaidi.vercel.app"
+];
+
 app.use(
     cors({
-        origin:
-            process.env.CLIENT_URL ||
-            "http://localhost:3000"
+        origin: (origin, callback) => {
+
+            // Allow requests without an Origin
+            // e.g. Postman/server-to-server
+            if (!origin) {
+                return callback(null, true);
+            }
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(
+                new Error(`CORS blocked origin: ${origin}`)
+            );
+        },
+
+        credentials: true
     })
 );
 
-app.use(express.json({ limit: "50mb" }));
+
+// ===============================
+// BODY PARSING
+// ===============================
+
+app.use(express.json({
+    limit: "50mb"
+}));
+
 app.use(
     express.urlencoded({
         limit: "50mb",
@@ -125,10 +253,20 @@ app.use(
     })
 );
 
+
+// ===============================
+// LOGGER
+// ===============================
+
 app.use(morgan("dev"));
 
-// Root
+
+// ===============================
+// ROOT
+// ===============================
+
 app.get("/", (req, res) => {
+
     res.json({
         message: "Backend is running",
         status: "success",
@@ -136,44 +274,85 @@ app.get("/", (req, res) => {
         docs: "/docs",
         health: "/api/health"
     });
+
 });
 
-// Swagger JSON
+
+// ===============================
+// SWAGGER JSON
+// ===============================
+
 app.get("/docs.json", (req, res) => {
+
     res.json(swaggerSpec);
+
 });
 
-// Swagger UI
+
+// ===============================
+// SWAGGER UI
+// ===============================
+
 app.use(
     "/docs",
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec)
 );
 
-// Health check
+
+// ===============================
+// HEALTH CHECK
+// ===============================
+
 app.get("/api/health", (req, res) => {
+
     res.json({
         status: "ok"
     });
+
 });
 
-// API routes
+
+// ===============================
+// API ROUTES
+// ===============================
+
 registerRoutes(app);
 
-// Error handling
+
+// ===============================
+// ERROR HANDLING
+// ===============================
+
 app.use(notFound);
+
 app.use(errorHandler);
 
-// Connect MongoDB
+
+// ===============================
+// DATABASE
+// ===============================
+
 connectDB()
     .then(() => {
-        console.log("MongoDB connected successfully");
+
+        console.log(
+            "MongoDB connected successfully"
+        );
+
     })
     .catch((err) => {
+
         console.error(
             "Failed to connect to MongoDB:",
             err.message
         );
+
     });
+
+
+// ===============================
+// EXPORT EXPRESS APP
+// ===============================
 
 module.exports = app;
