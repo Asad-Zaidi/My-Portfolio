@@ -18,9 +18,34 @@ const registerRoutes = require("./index");
 
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://asadzaidi.vercel.app",
+    ...(process.env.CLIENT_URL
+        ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/+$/, ""))
+        : []),
+];
+
 app.use(
     cors({
-        origin: process.env.CLIENT_URL || "http://localhost:3000"
+        origin: function (origin, callback) {
+            // Allow requests with no origin (like mobile apps, curl, Postman)
+            if (!origin) return callback(null, true);
+
+            const normalizedOrigin = origin.replace(/\/+$/, "");
+            if (
+                allowedOrigins.includes(normalizedOrigin) ||
+                normalizedOrigin.endsWith(".vercel.app")
+            ) {
+                return callback(null, true);
+            }
+
+            return callback(new Error(`CORS blocked for origin: ${origin}`));
+        },
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
 
