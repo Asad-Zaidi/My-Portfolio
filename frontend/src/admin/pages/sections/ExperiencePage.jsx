@@ -12,6 +12,7 @@ import {
 } from "react-icons/lu";
 import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";
+import TechPickerInput from "../../components/TechPickerInput";
 
 const SECTION_KEY = "experience";
 const ITEM_LABEL = "experience entry";
@@ -141,15 +142,13 @@ function ExperienceEditor({ items = [], onChange }) {
                   onChange={(e) => updateItemField(index, "description", e.target.value)}
                 />
               </div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Technologies</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.technologies || ""}
-                  onChange={(e) => updateItemField(index, "technologies", e.target.value)}
-                />
-              </div>
+              <TechPickerInput
+                label="Technologies (comma separated)"
+                placeholder="React, Node.js, Tailwind CSS, TypeScript"
+                value={item.technologies || ""}
+                onChange={(val) => updateItemField(index, "technologies", val)}
+                helpText="Icons are automatically rendered for matched technologies."
+              />
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-slate-300">Logo Text</label>
                 <input

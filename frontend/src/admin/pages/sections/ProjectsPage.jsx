@@ -25,6 +25,7 @@ import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";
 import { useTheme } from "../../../context/ThemeContext";
 import { getTechIcon, TechIcon } from "../../../components/Skills";
+import TechPickerInput from "../../components/TechPickerInput";
 
 const SECTION_KEY = "projects";
 const ITEM_LABEL = "project";
@@ -307,34 +308,21 @@ function ProjectsEditor({ items = [], onChange, editingIndex, setEditingIndex, o
               />
             </div>
 
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Technologies (comma separated)
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 dark:border-navy-600 dark:bg-navy-900/60 dark:text-slate-100 dark:placeholder:text-slate-500"
-                placeholder="React, Node.js, Tailwind CSS, MongoDB, TypeScript"
-                value={item.technologies ?? ""}
-                onChange={(e) => updateItemField(editingIndex, "technologies", e.target.value)}
-              />
-              <span className="mt-1 block text-[11px] text-slate-500 dark:text-slate-400">
-                Icons are automatically rendered for matched tech (React, Python, TypeScript, Docker, etc.).
-              </span>
-            </div>
+            <TechPickerInput
+              label="Technologies (comma separated)"
+              placeholder="React, Node.js, Tailwind CSS, MongoDB, TypeScript"
+              value={item.technologies ?? ""}
+              onChange={(val) => updateItemField(editingIndex, "technologies", val)}
+              helpText="Icons are automatically rendered for matched tech (React, Python, TypeScript, Docker, etc.)."
+            />
 
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Tools (comma separated)
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 dark:border-navy-600 dark:bg-navy-900/60 dark:text-slate-100 dark:placeholder:text-slate-500"
-                placeholder="Docker, Git, VS Code, Postman, Figma"
-                value={item.tools ?? ""}
-                onChange={(e) => updateItemField(editingIndex, "tools", e.target.value)}
-              />
-            </div>
+            <TechPickerInput
+              label="Tools (comma separated)"
+              placeholder="Docker, Git, VS Code, Postman, Figma"
+              value={item.tools ?? ""}
+              onChange={(val) => updateItemField(editingIndex, "tools", val)}
+              helpText="Select or type tools used in this project."
+            />
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
