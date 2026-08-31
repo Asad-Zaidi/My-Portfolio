@@ -21,10 +21,6 @@ import { usePortfolioData } from "../../../context/PortfolioDataContext";
 const SECTION_KEY = "projects";
 const ITEM_LABEL = "project";
 
-function clone(value) {
-  return value === undefined ? value : JSON.parse(JSON.stringify(value));
-}
-
 function normalizeForEditing(items = []) {
   return (items || []).map((item) => ({
     ...item,
