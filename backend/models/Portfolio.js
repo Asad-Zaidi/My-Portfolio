@@ -142,6 +142,22 @@ const skillsSchema = new Schema(
   { _id: false }
 );
 
+const projectSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, default: "" },
+    image: { type: String, default: "" },
+    technologies: { type: [String], default: [] },
+    tools: { type: [String], default: [] },
+    liveUrl: { type: String, default: "" },
+    githubUrl: { type: String, default: "" },
+    category: { type: String, default: "" },
+    featured: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
 const certificationSchema = new Schema(
   {
     id: { type: String, required: true },
@@ -249,6 +265,7 @@ const portfolioSchema = new Schema(
     about: { type: aboutSchema, default: () => ({}) },
     personalInfoCard: { type: personalInfoCardSchema, default: () => ({}) },
     education: { type: [educationSchema], default: [] },
+    projects: { type: [projectSchema], default: [] },
     experience: { type: [experienceSchema], default: [] },
     skills: { type: skillsSchema, default: () => ({}) },
     certifications: { type: [certificationSchema], default: [] },

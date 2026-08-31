@@ -14,6 +14,7 @@ import ContactPage from "../admin/pages/sections/ContactPage";
 import ResumePage from "../admin/pages/sections/ResumePage";
 import StatsPage from "../admin/pages/sections/StatsPage";
 import EducationPage from "../admin/pages/sections/EducationPage";
+import ProjectsPage from "../admin/pages/sections/ProjectsPage";
 import ExperiencePage from "../admin/pages/sections/ExperiencePage";
 import CertificationsPage from "../admin/pages/sections/CertificationsPage";
 import BlogsPage from "../admin/pages/sections/BlogsPage";
@@ -23,6 +24,7 @@ import LanguagesPage from "../admin/pages/sections/LanguagesPage";
 import SocialsPage from "../admin/pages/sections/SocialsPage";
 import NavPage from "../admin/pages/sections/NavPage";
 import MessagesPage from "../admin/pages/MessagesPage";
+import ChangePasswordPage from "../admin/pages/ChangePasswordPage";
 import { PortfolioDataProvider } from "../context/PortfolioDataContext";
 
 function ProtectedRoute() {
@@ -68,6 +70,7 @@ export default function AdminRoutes() {
 					<Route path="sections/resume" element={<ResumePage />} />
 					<Route path="sections/stats" element={<StatsPage />} />
 					<Route path="sections/education" element={<EducationPage />} />
+					<Route path="sections/projects" element={<ProjectsPage />} />
 					<Route path="sections/experience" element={<ExperiencePage />} />
 					<Route path="sections/certifications" element={<CertificationsPage />} />
 					<Route path="sections/blogs" element={<BlogsPage />} />
@@ -77,6 +80,7 @@ export default function AdminRoutes() {
 					<Route path="sections/socials" element={<SocialsPage />} />
 					<Route path="sections/nav" element={<NavPage />} />
 					<Route path="messages" element={<MessagesPage />} />
+					<Route path="change-password" element={<ChangePasswordPage />} />
 				</Route>
 			</Route>
 		</Routes>

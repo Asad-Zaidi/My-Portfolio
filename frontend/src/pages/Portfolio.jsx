@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import About from "../components/About";
 import Education from "../components/Education";
+import Projects from "../components/Projects";
 import Experience from "../components/Experience";
 import Skills from "../components/Skills";
 import Certifications from "../components/Certifications";
@@ -50,7 +51,7 @@ export default function Portfolio() {
     };
   }, []);
 
-  const { meta, personal, stats, hero, about, personalInfoCard, education, experience, skills, certifications, badges, hobbies, languages, contact, socials, resume, nav } =
+  const { meta, personal, stats, hero, about, personalInfoCard, education, projects, experience, skills, certifications, badges, hobbies, languages, contact, socials, resume, nav } =
     data || {};
 
   // SEO: keep <head> in sync with the fetched content rather than hardcoding it in index.html
@@ -89,6 +90,7 @@ export default function Portfolio() {
         <Hero personal={personal} stats={stats} hero={hero} socials={socials} />
         <About personal={personal} about={about} personalInfoCard={personalInfoCard} />
         <Education items={education} />
+        <Projects items={projects} />
 
         <section className="-mx-6 bg-white dark:bg-navy-950 py-16 md:mx-0 md:py-24">
           <div className="container grid gap-12 lg:grid-cols-5 items-start">

@@ -3,7 +3,8 @@ const getBaseUrl = () => {
     process.env.REACT_APP_API_URL ||
     process.env.REACT_APP_BACKEND_URL ||
     process.env.BACKEND_API_URL ||
-    "https://asad-portfolio-backend.vercel.app/api";
+    "http://localhost:5000/api";
+  // "https://asad-portfolio-backend.vercel.app/api";
 
   const cleaned = envUrl.replace(/\/+$/, "");
   return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
@@ -150,6 +151,15 @@ export async function adminLogin(email, password) {
 
 export async function adminGetMe(token) {
   const res = await fetch(`${API_URL}/auth/me`, { headers: authHeaders(token) });
+  return handleResponse(res);
+}
+
+export async function adminChangePassword(token, { currentPassword, newPassword }) {
+  const res = await fetch(`${API_URL}/auth/change-password`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
   return handleResponse(res);
 }
 

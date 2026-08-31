@@ -8,6 +8,7 @@ import {
   LuIdCard as IdCard,
   LuWrench as Wrench,
   LuGraduationCap as GraduationCap,
+  LuFolderGit2 as FolderGit2,
   LuBriefcase as Briefcase,
   LuAward as Award,
   LuBadgeCheck as BadgeCheck,
@@ -19,6 +20,7 @@ import {
   LuShare2 as Share2,
   LuMenu as MenuIcon,
   LuInbox as Inbox,
+  LuKeyRound as KeyRound,
   LuExternalLink as ExternalLink,
   LuChevronLeft as ChevronLeft,
   LuChevronRight as ChevronRight,
@@ -46,6 +48,7 @@ const groups = [
     items: [
       { to: "/admin/sections/skills", label: "Skills", icon: Wrench },
       { to: "/admin/sections/education", label: "Education", icon: GraduationCap },
+      { to: "/admin/sections/projects", label: "Projects", icon: FolderGit2 },
       { to: "/admin/sections/experience", label: "Experience", icon: Briefcase },
       { to: "/admin/sections/certifications", label: "Certifications", icon: Award },
       { to: "/admin/sections/badges", label: "Badges", icon: BadgeCheck },
@@ -70,6 +73,12 @@ const groups = [
   {
     title: "Inbox",
     items: [{ to: "/admin/messages", label: "Messages", icon: Inbox }],
+  },
+  {
+    title: "Account",
+    items: [
+      { to: "/admin/change-password", label: "Change Password", icon: KeyRound },
+    ],
   },
 ];
 

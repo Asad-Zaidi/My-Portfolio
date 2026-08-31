@@ -33,4 +33,48 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { login, getMe };
+// PUT /api/auth/change-password
+const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ message: "Current password and new password are required." });
+  }
+
+  const admin = await Admin.findById(req.admin._id).select("+password");
+  if (!admin) {
+    return res.status(404).json({ message: "Admin account not found." });
+  }
+
+  const isMatch = await admin.comparePassword(currentPassword);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Current password is incorrect." });
+  }
+
+  if (currentPassword === newPassword) {
+    return res.status(400).json({ message: "New password cannot be the same as your current password." });
+  }
+
+  if (newPassword.length < 8) {
+    return res.status(400).json({ message: "Password must be at least 8 characters long." });
+  }
+  if (!/[A-Z]/.test(newPassword)) {
+    return res.status(400).json({ message: "Password must contain at least one uppercase letter." });
+  }
+  if (!/[a-z]/.test(newPassword)) {
+    return res.status(400).json({ message: "Password must contain at least one lowercase letter." });
+  }
+  if (!/[0-9]/.test(newPassword)) {
+    return res.status(400).json({ message: "Password must contain at least one number." });
+  }
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]/.test(newPassword)) {
+    return res.status(400).json({ message: "Password must contain at least one special character." });
+  }
+
+  admin.password = newPassword;
+  await admin.save();
+
+  res.json({ message: "Password changed successfully." });
+});
+
+module.exports = { login, getMe, changePassword };

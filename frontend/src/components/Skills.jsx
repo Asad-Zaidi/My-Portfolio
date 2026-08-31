@@ -5,6 +5,7 @@ import {
   SiDocker,
   SiMongodb,
   SiPostman,
+  SiExpress,
   SiTypescript,
   SiCplusplus,
   SiC,
@@ -14,6 +15,7 @@ import {
   SiKotlin,
   SiDart,
   SiRuby,
+  SiCloudinary
 } from "react-icons/si";
 import { TbBrandCSharp } from "react-icons/tb";
 import { VscVscode } from "react-icons/vsc";
@@ -48,6 +50,8 @@ export const techIcons = [
   { key: "dart", label: "Dart", icon: SiDart, color: "#0175C2" },
   { key: "ruby", label: "Ruby", icon: SiRuby, color: "#CC342D" },
   { key: "flutter", label: "Flutter", icon: FaFlutter, color: "#02569B" },
+  { key: "express", label: "Express", icon: SiExpress, adaptive: true },
+  { key: "cloudinary", label: "Cloudinary", icon: SiCloudinary, color: "#3448C5" },
 
   // Frameworks, Libraries & Tools
   { key: "react", label: "React", icon: FaReact, color: "#61DAFB" },
@@ -58,7 +62,7 @@ export const techIcons = [
   { key: "vscode", label: "VS Code", icon: VscVscode, color: "#007ACC" },
   { key: "figma", label: "Figma", icon: FaFigma, color: "#1ABC9C" },
   { key: "git", label: "Git", icon: FaGitAlt, color: "#F05032" },
-  { key: "github", label: "GitHub", icon: FaGithub, color: "#000000ff" },
+  { key: "github", label: "GitHub", icon: FaGithub, adaptive: true },
   { key: "postman", label: "Postman", icon: SiPostman, color: "#FF6C37" },
 ];
 
@@ -71,6 +75,26 @@ export function getTechIcon(key) {
   );
 }
 
+export function TechIcon({ tech, className = "", style = {} }) {
+  if (!tech || !tech.icon) return null;
+  const isAdaptive =
+    tech.adaptive ||
+    !tech.color ||
+    tech.color === "#000000" ||
+    tech.color === "#000000ff" ||
+    tech.color?.toLowerCase() === "#181717" ||
+    tech.color === "black";
+
+  const IconComponent = tech.icon;
+
+  return (
+    <IconComponent
+      className={`${className} ${isAdaptive ? "text-slate-900 dark:text-white" : ""}`}
+      style={!isAdaptive ? { color: tech.color, ...style } : style}
+    />
+  );
+}
+
 function LanguageBar({ name, percent, delay, icon }) {
   const [ref, inView] = useReveal();
   const tech = getTechIcon(icon || name);
@@ -80,7 +104,7 @@ function LanguageBar({ name, percent, delay, icon }) {
         <div className="flex items-center gap-2 min-w-0">
           {tech && (
             <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-              <tech.icon className="h-4 w-4" style={{ color: tech.color }} />
+              <TechIcon tech={tech} className="h-4 w-4" />
             </span>
           )}
           <span className="font-medium text-slate-700 dark:text-slate-200 truncate">{name}</span>
@@ -131,7 +155,7 @@ export default function Skills({ languages = [], tools = [] }) {
             </h3>
             <div className="grid grid-cols-4 gap-3">
               {tools.map((tool) => {
-                const tech = getTechIcon(tool.icon);
+                const tech = getTechIcon(tool.icon || tool.name);
                 return (
                   <div
                     key={tool.name}
@@ -140,7 +164,7 @@ export default function Skills({ languages = [], tools = [] }) {
                   >
                     <span className="flex h-9 w-9 items-center justify-center">
                       {tech ? (
-                        <tech.icon className="h-8 w-8" color={tech.color} />
+                        <TechIcon tech={tech} className="h-8 w-8" />
                       ) : (
                         <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent/10 text-xs font-bold text-accent">
                           {tool.name.slice(0, 2).toUpperCase()}

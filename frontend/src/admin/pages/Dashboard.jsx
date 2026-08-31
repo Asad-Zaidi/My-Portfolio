@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   LuGraduationCap as GraduationCap,
+  LuFolderGit2 as FolderGit2,
   LuBriefcase as Briefcase,
   LuAward as Award,
   LuInbox as Inbox,
@@ -56,8 +57,9 @@ export default function Dashboard() {
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Here's a quick snapshot of your portfolio content.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard icon={GraduationCap} label="Education entries" value={data.education?.length ?? 0} to="/admin/sections/education" />
+        <StatCard icon={FolderGit2} label="Projects" value={data.projects?.length ?? 0} to="/admin/sections/projects" />
         <StatCard icon={Briefcase} label="Experience entries" value={data.experience?.length ?? 0} to="/admin/sections/experience" />
         <StatCard icon={Award} label="Certifications" value={data.certifications?.length ?? 0} to="/admin/sections/certifications" />
         <StatCard icon={Inbox} label="Unread messages" value={unread ?? "–"} to="/admin/messages" />
@@ -74,12 +76,14 @@ export default function Dashboard() {
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-navy-700 dark:bg-navy-800/50">
         <div className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">Quick links</div>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {[
             ["General & SEO", "/admin/sections/meta"],
             ["Personal Info", "/admin/sections/personal"],
             ["Hero Section", "/admin/sections/hero"],
+            ["Projects", "/admin/sections/projects"],
             ["Skills", "/admin/sections/skills"],
+            ["Education", "/admin/sections/education"],
           ].map(([label, to]) => (
             <Link
               key={to}

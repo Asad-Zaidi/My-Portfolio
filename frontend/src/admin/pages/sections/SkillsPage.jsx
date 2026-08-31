@@ -12,7 +12,7 @@ import {
 } from "react-icons/lu";
 import { useToast } from "../../../components/ToastContext";
 import { usePortfolioData } from "../../../context/PortfolioDataContext";
-import { techIcons, getTechIcon } from "../../../components/Skills";
+import { techIcons, getTechIcon, TechIcon } from "../../../components/Skills";
 
 const SECTION_KEY = "skills";
 
@@ -242,7 +242,7 @@ export default function SkillsPage() {
                         title={tech ? `${tech.label} (${tech.key})` : item.icon || "No icon selected"}
                       >
                         {tech ? (
-                          <tech.icon className="h-5 w-5" style={{ color: tech.color }} />
+                          <TechIcon tech={tech} className="h-5 w-5" />
                         ) : item.name ? (
                           <span className="text-xs font-bold text-accent">
                             {item.name.slice(0, 2).toUpperCase()}
@@ -331,7 +331,7 @@ export default function SkillsPage() {
                         title={tech ? `${tech.label} (${tech.key})` : item.icon || "No icon selected"}
                       >
                         {tech ? (
-                          <tech.icon className="h-5 w-5" style={{ color: tech.color }} />
+                          <TechIcon tech={tech} className="h-5 w-5" />
                         ) : item.name ? (
                           <span className="text-xs font-bold text-accent">
                             {item.name.slice(0, 2).toUpperCase()}
