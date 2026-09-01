@@ -11,7 +11,6 @@ import {
   FaLinkedin,
   FaWhatsapp,
   FaXTwitter,
-  FaYoutube,
 } from "react-icons/fa6";
 import Avatar from "./Avatar";
 import profileImage from "../assets/profile.png";
@@ -21,7 +20,6 @@ const socialLinks = [
   { key: "linkedin", label: "LinkedIn", icon: FaLinkedin, color: "#0A66C2" },
   { key: "x", label: "X", icon: FaXTwitter, color: "#0f172a" },
   { key: "twitter", label: "Twitter", icon: FaXTwitter, color: "#0ea5e9" },
-  { key: "youtube", label: "YouTube", icon: FaYoutube, color: "#dc2626" },
   { key: "whatsapp", label: "WhatsApp", icon: FaWhatsapp, color: "#22c55e" },
   { key: "facebook", label: "Facebook", icon: FaFacebook, color: "#1877F2" },
   { key: "instagram", label: "Instagram", icon: FaInstagram, color: "#ec4899" },

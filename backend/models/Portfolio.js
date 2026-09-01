@@ -48,6 +48,7 @@ const statSchema = new Schema(
     id: { type: String, required: true },
     value: { type: String, default: "" },
     label: { type: String, default: "" },
+    auto: { type: Boolean, default: false },
   },
   { _id: false }
 );

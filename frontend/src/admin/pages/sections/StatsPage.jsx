@@ -20,7 +20,63 @@ function clone(value) {
   return value === undefined ? value : JSON.parse(JSON.stringify(value));
 }
 
-function StatsEditor({ items = [], onChange }) {
+function getDynamicStatValue(item, projectCount, technologyCount) {
+  const label = String(item?.label || "").toLowerCase();
+
+  if (/project/.test(label) || /completed/.test(label)) {
+    return String(projectCount);
+  }
+
+  if (/technology|tech|stack|tool/.test(label)) {
+    return String(technologyCount);
+  }
+
+  return item?.value ?? "";
+}
+
+function normalizeDraftStats(items = [], projects = [], skills = {}) {
+  const projectCount = Array.isArray(projects) ? projects.length : 0;
+  const techSet = new Set();
+
+  (Array.isArray(projects) ? projects : []).forEach((project) => {
+    const technologies = Array.isArray(project?.technologies) ? project.technologies : [];
+    const tools = Array.isArray(project?.tools) ? project.tools : [];
+    [...technologies, ...tools].forEach((value) => {
+      const normalized = String(value || "").trim();
+      if (normalized) techSet.add(normalized.toLowerCase());
+    });
+  });
+
+  (Array.isArray(skills?.tools) ? skills.tools : []).forEach((tool) => {
+    const normalized = String(tool?.name || "").trim();
+    if (normalized) techSet.add(normalized.toLowerCase());
+  });
+
+  (Array.isArray(skills?.languages) ? skills.languages : []).forEach((lang) => {
+    const normalized = String(lang?.name || "").trim();
+    if (normalized) techSet.add(normalized.toLowerCase());
+  });
+
+  const technologyCount = techSet.size;
+
+  return (Array.isArray(items) ? items : []).map((item) => {
+    const label = String(item?.label || "").toLowerCase();
+    const isProjectStat = /project/.test(label) || /completed/.test(label);
+    const isTechStat = /technology|tech|stack|tool/.test(label);
+
+    if (isProjectStat && !/year|experience/.test(label)) {
+      return { ...item, auto: true, value: String(projectCount) };
+    }
+
+    if (isTechStat && !/project/.test(label) && !/year|experience|dedicat/.test(label)) {
+      return { ...item, auto: true, value: String(technologyCount) };
+    }
+
+    return { ...item, auto: Boolean(item?.auto) };
+  });
+}
+
+function StatsEditor({ items = [], onChange, projectCount = 0, technologyCount = 0 }) {
   const move = (index, dir) => {
     const next = [...items];
     const target = index + dir;
@@ -30,11 +86,21 @@ function StatsEditor({ items = [], onChange }) {
   };
 
   const remove = (index) => onChange(items.filter((_, i) => i !== index));
-  const add = () => onChange([...items, { id: `${SECTION_KEY}-${Date.now().toString(36)}`, value: "", label: "" }]);
+  const add = () => onChange([...items, { id: `${SECTION_KEY}-${Date.now().toString(36)}`, value: "", label: "", auto: false }]);
 
   const updateItemField = (index, key, val) => {
     const next = [...items];
     next[index] = { ...next[index], [key]: val };
+    onChange(next);
+  };
+
+  const toggleAutoValue = (index, item) => {
+    const next = [...items];
+    const nextItem = { ...item, auto: !Boolean(item.auto) };
+    if (nextItem.auto) {
+      nextItem.value = getDynamicStatValue(nextItem, projectCount, technologyCount);
+    }
+    next[index] = nextItem;
     onChange(next);
   };
 
@@ -74,12 +140,22 @@ function StatsEditor({ items = [], onChange }) {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-slate-300">Value</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.value || ""}
-                  onChange={(e) => updateItemField(index, "value", e.target.value)}
-                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-60"
+                    value={item.auto ? getDynamicStatValue(item, projectCount, technologyCount) : item.value || ""}
+                    disabled={Boolean(item.auto)}
+                    onChange={(e) => updateItemField(index, "value", e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => toggleAutoValue(index, item)}
+                    className={`shrink-0 rounded-lg border px-2.5 py-2 text-[11px] font-semibold ${item.auto ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300" : "border-navy-600 bg-navy-900/60 text-slate-300"}`}
+                  >
+                    {item.auto ? "Auto" : "Manual"}
+                  </button>
+                </div>
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-slate-300">Label</label>
@@ -148,14 +224,33 @@ export default function StatsPage() {
   const { data, loading, error, saveSection } = usePortfolioData();
   const toast = useToast();
   const original = data?.[SECTION_KEY];
+  const projectCount = Array.isArray(data?.projects) ? data.projects.length : 0;
+  const technologyCount = (() => {
+    const set = new Set();
+    (Array.isArray(data?.projects) ? data.projects : []).forEach((project) => {
+      [...(Array.isArray(project?.technologies) ? project.technologies : []), ...(Array.isArray(project?.tools) ? project.tools : [])].forEach((value) => {
+        const normalized = String(value || "").trim();
+        if (normalized) set.add(normalized.toLowerCase());
+      });
+    });
+    (Array.isArray(data?.skills?.tools) ? data.skills.tools : []).forEach((tool) => {
+      const normalized = String(tool?.name || "").trim();
+      if (normalized) set.add(normalized.toLowerCase());
+    });
+    (Array.isArray(data?.skills?.languages) ? data.skills.languages : []).forEach((lang) => {
+      const normalized = String(lang?.name || "").trim();
+      if (normalized) set.add(normalized.toLowerCase());
+    });
+    return set.size;
+  })();
 
-  const [draft, setDraft] = useState(() => clone(original) || []);
+  const [draft, setDraft] = useState(() => normalizeDraftStats(original, data?.projects, data?.skills));
   const [saving, setSaving] = useState(false);
 
   // Re-sync the draft when original data loads or changes.
   useEffect(() => {
-    setDraft(clone(original) || []);
-  }, [original]);
+    setDraft(normalizeDraftStats(original, data?.projects, data?.skills));
+  }, [original, data?.projects, data?.skills]);
 
   if (loading || !data) {
     return (
@@ -201,7 +296,7 @@ export default function StatsPage() {
         </span>
       </div>
 
-      <StatsEditor items={draft} onChange={setDraft} />
+      <StatsEditor items={draft} onChange={setDraft} projectCount={projectCount} technologyCount={technologyCount} />
 
       <SaveBar dirty={dirty} saving={saving} onSave={handleSave} onDiscard={handleDiscard} />
     </div>

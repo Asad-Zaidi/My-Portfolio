@@ -16,7 +16,11 @@ import {
   SiDart,
   SiRuby,
   SiCloudinary,
-  SiFastapi
+  SiFastapi,
+  SiNumpy,
+  SiTensorflow,
+  SiJupyter,
+  SiGooglecolab
 } from "react-icons/si";
 import { TbBrandCSharp, TbBrandReactNative } from "react-icons/tb";
 import { VscVscode } from "react-icons/vsc";
@@ -53,20 +57,24 @@ export const techIcons = [
   { key: "flutter", label: "Flutter", icon: FaFlutter, color: "#02569B" },
 
   // Frameworks, Libraries & Tools
-  { key: "express", label: "Express", icon: SiExpress, adaptive: true },
+  { key: "express", label: "Express.js", icon: SiExpress, adaptive: true },
   { key: "cloudinary", label: "Cloudinary", icon: SiCloudinary, color: "#3448C5" },
   { key: "fastapi", label: "FastAPI", icon: SiFastapi, color: "#009688" },
-  { key: "react", label: "React", icon: FaReact, color: "#61DAFB" },
+  { key: "react", label: "ReactJS", icon: FaReact, color: "#61DAFB" },
   { key: "reactnative", label: "React Native", icon: TbBrandReactNative, color: "#0081A3" },
   { key: "node", label: "Node.js", icon: FaNodeJs, color: "#5FA04E" },
   { key: "mongodb", label: "MongoDB", icon: SiMongodb, color: "#47A248" },
   { key: "tailwind", label: "Tailwind CSS", icon: RiTailwindCssFill, color: "#06B6D4" },
   { key: "docker", label: "Docker", icon: SiDocker, color: "#2496ED" },
   { key: "vscode", label: "VS Code", icon: VscVscode, color: "#007ACC" },
+  { key: "googlecolab", label: "Google Colab", icon: SiGooglecolab, color: "#F37626" },
+  { key: "jupyter", label: "Jupyter Notebook", icon: SiJupyter, color: "#F37626" },
   { key: "figma", label: "Figma", icon: FaFigma, color: "#1ABC9C" },
   { key: "git", label: "Git", icon: FaGitAlt, color: "#F05032" },
   { key: "github", label: "GitHub", icon: FaGithub, adaptive: true },
   { key: "postman", label: "Postman", icon: SiPostman, color: "#FF6C37" },
+  { key: "numpy", label: "NumPy", icon: SiNumpy, color: "#1565C0" },
+  { key: "tensorflow", label: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
 ];
 
 export function getTechIcon(key) {
