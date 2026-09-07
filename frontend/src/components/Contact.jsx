@@ -120,20 +120,6 @@ export default function Contact({ contact, resume }) {
               </a>
             )}
 
-            {/* decorative world map */}
-            <div className="relative hidden sm:flex flex-1 min-h-[140px] items-center justify-center rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 overflow-hidden">
-              <div
-                className="absolute inset-0 opacity-40"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(currentColor 1px, transparent 1px)",
-                  backgroundSize: "14px 14px",
-                  color: "#94a3b8",
-                }}
-              />
-              <MapPin className="absolute h-5 w-5 text-accent" style={{ top: "38%", left: "42%" }} />
-              <MapPin className="absolute h-4 w-4 text-accent/60" style={{ top: "55%", left: "62%" }} />
-            </div>
           </Reveal>
 
           {/* right: form */}

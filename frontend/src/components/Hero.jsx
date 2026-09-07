@@ -13,7 +13,6 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 import Avatar from "./Avatar";
-import profileImage from "../assets/profile.png";
 
 const socialLinks = [
   { key: "github", label: "GitHub", icon: FaGithub, color: "#0f172a" },
@@ -187,7 +186,7 @@ export default function Hero({ personal = {}, stats = [], hero = {}, socials = [
             <div className="absolute inset-6 rounded-full bg-gradient-to-br from-accent/30 via-blue-500/10 to-transparent blur-xl" />
 
             <div className="absolute inset-10 rounded-3xl overflow-hidden ring-4 ring-white/10 shadow-glow">
-              <Avatar name={personal?.name || "Portfolio"} src={personal?.heroImage || profileImage} className="h-full w-full text-6xl" />
+              <Avatar name={personal?.name || "Portfolio"} src={personal?.heroImage || personal?.profileImage} className="h-full w-full text-6xl" />
             </div>
 
             <span className="absolute top-2 left-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-slate-200 text-accent-light shadow-card dark:bg-navy-900 dark:border-white/10">
