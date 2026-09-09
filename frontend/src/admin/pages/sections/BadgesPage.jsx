@@ -4,8 +4,9 @@ import {
   LuLoaderCircle as Loader2,
   LuSave as Save,
   LuRotateCcw as RotateCcw,
-  LuCode as Code,
   LuPenLine as Edit3,
+  LuArrowLeft as ArrowLeft,
+  LuCheck as Check,
   LuPlus as Plus,
   LuTrash2 as Trash2,
 } from "react-icons/lu";
@@ -61,7 +62,7 @@ function BadgePreview({ embedCode }) {
 }
 
 function BadgeListEditor({ items = [], onChange }) {
-  const [editing, setEditing] = useState(() => new Set());
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const updateItemField = (index, key, value) => {
     const next = [...items];
@@ -71,101 +72,107 @@ function BadgeListEditor({ items = [], onChange }) {
 
   const remove = (index) => {
     onChange(items.filter((_, itemIndex) => itemIndex !== index));
-    setEditing((current) => {
-      const next = new Set();
-      current.forEach((value) => {
-        if (value < index) next.add(value);
-        if (value > index) next.add(value - 1);
-      });
-      return next;
-    });
+    if (editingIndex === index) setEditingIndex(null);
+    else if (editingIndex !== null && editingIndex > index) setEditingIndex(editingIndex - 1);
   };
 
   const add = () => {
     const item = { id: `${SECTION_KEY}-${Date.now().toString(36)}`, embedCode: "" };
     onChange([...items, item]);
-    setEditing((current) => new Set(current).add(items.length));
+    setEditingIndex(items.length);
   };
 
-  const toggleEdit = (index) => {
-    setEditing((current) => {
-      const next = new Set(current);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
-  };
+  if (editingIndex !== null && items[editingIndex]) {
+    const item = items[editingIndex];
+    return (
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-navy-700 dark:bg-navy-800/80">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setEditingIndex(null)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:border-accent/60 hover:text-slate-900 dark:border-navy-600 dark:bg-navy-900/60 dark:text-slate-200 dark:hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" /> Back to Badges
+            </button>
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">Badge #{editingIndex + 1}</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Edit the badge embed code.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => remove(editingIndex)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-500 hover:text-white dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400"
+            >
+              <Trash2 className="h-4 w-4" /> Delete
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditingIndex(null)}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent-dark"
+            >
+              <Check className="h-4 w-4" /> Done Editing
+            </button>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-navy-700 dark:bg-navy-800/80">
+          <div className="grid gap-5 lg:grid-cols-[180px_minmax(0,1fr)]">
+            <BadgePreview embedCode={item.embedCode} />
+            <div className="min-w-0">
+              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Badge Embed Code</label>
+              <textarea
+                rows={8}
+                className="w-full resize-y rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 dark:border-navy-600 dark:bg-navy-900/60 dark:text-slate-100 dark:placeholder:text-slate-500"
+                value={item.embedCode || ""}
+                placeholder="Paste the complete badge embed code here"
+                onChange={(e) => updateItemField(editingIndex, "embedCode", e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
       {items.length === 0 && (
-        <p className="rounded-lg border border-dashed border-navy-600 bg-navy-900/30 px-4 py-6 text-center text-sm text-slate-500">
+        <p className="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500 dark:border-navy-600 dark:bg-navy-900/30">
           No {ITEM_LABEL}s yet — add one below.
         </p>
       )}
 
-      {items.map((item, index) => {
+      {items.length > 0 && (
+        <div className="grid grid-cols-[repeat(auto-fit,180px)] justify-start gap-4">
+          {items.map((item, index) => {
         const hasEmbed = Boolean(item.embedCode?.trim());
-        const isEditing = editing.has(index) || !hasEmbed;
 
         return (
-          <div key={item.id || index} className="rounded-xl border border-navy-700 bg-navy-800/60 p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-sm font-semibold text-white">Badge {index + 1}</h2>
-                <p className="mt-1 text-xs text-slate-500">
-                  {hasEmbed ? "Saved badge embed" : "Add an embed code to preview this badge"}
-                </p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
-                {hasEmbed && (
-                  <button
-                    type="button"
-                    onClick={() => toggleEdit(index)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-navy-600 px-3 py-2 text-xs font-semibold text-slate-300 hover:border-accent/60 hover:text-white"
-                  >
-                    <Edit3 className="h-3.5 w-3.5" /> {isEditing ? "Close" : "Edit"}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => remove(index)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/10"
-                >
-                  <Trash2 className="h-3.5 w-3.5" /> Delete
-                </button>
-              </div>
+          <div key={item.id || index} className="relative flex w-[180px] min-w-0 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white hover:border-slate-300 dark:border-navy-700 dark:bg-navy-800/60 dark:hover:border-navy-600">
+            <div className="relative flex items-center justify-center bg-white p-0">
+              <BadgePreview embedCode={item.embedCode} />
+              {!hasEmbed && <span className="absolute text-xs font-semibold text-slate-500">No preview yet</span>}
             </div>
-
-            <div className={`mt-4 grid gap-5 ${isEditing && hasEmbed ? "lg:grid-cols-[180px_minmax(0,1fr)]" : ""}`}>
-              {hasEmbed && <BadgePreview embedCode={item.embedCode} />}
-              {isEditing && (
-                <div className="min-w-0">
-                  <label className="mb-1.5 block text-sm font-medium text-slate-300">Badge Embed Code</label>
-                  <textarea
-                    rows={4}
-                    className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 resize-y"
-                    value={item.embedCode || ""}
-                    placeholder="Paste the complete badge embed code here"
-                    onChange={(e) => updateItemField(index, "embedCode", e.target.value)}
-                  />
-                </div>
-              )}
+            <div className="absolute right-2 top-2 z-10 flex items-center gap-1">
+              <button type="button" onClick={() => setEditingIndex(index)} className="p-1.5 text-slate-700 drop-shadow-md hover:text-accent" title="Edit badge" aria-label="Edit badge">
+                <Edit3 className="h-3.5 w-3.5" />
+              </button>
+              <button type="button" onClick={() => remove(index)} className="p-1.5 text-red-500 drop-shadow-md hover:text-red-700" title="Delete badge" aria-label="Delete badge">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
             </div>
-
-            {!isEditing && hasEmbed && (
-              <div className="mt-4 flex items-center gap-2 text-xs text-emerald-300">
-                <Code className="h-3.5 w-3.5" /> Embed preview loaded
-              </div>
-            )}
           </div>
         );
-      })}
+          })}
+        </div>
+      )}
 
       <button
         type="button"
         onClick={add}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-navy-600 py-3 text-sm font-semibold text-slate-400 hover:border-accent/60 hover:text-accent-light"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 py-3 text-sm font-semibold text-slate-500 hover:border-accent/60 hover:text-accent dark:border-navy-600 dark:text-slate-400 dark:hover:text-accent-light"
       >
         <Plus className="h-4 w-4" /> Add {ITEM_LABEL}
       </button>
@@ -176,14 +183,14 @@ function BadgeListEditor({ items = [], onChange }) {
 function SaveBar({ dirty, saving, onSave, onDiscard }) {
   return (
     <div className={`fixed inset-x-0 bottom-0 z-30 transition-all duration-300 lg:pl-[var(--admin-sidebar-w,16rem)] ${dirty ? "translate-y-0" : "translate-y-full"}`}>
-      <div className="mx-auto flex max-w-full items-center justify-between gap-4 border-t border-navy-700 bg-navy-900/95 px-6 py-3.5 backdrop-blur-md shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.5)]">
-        <span className="text-sm font-medium text-amber-300">You have unsaved changes.</span>
+      <div className="mx-auto flex max-w-full items-center justify-between gap-4 border-t border-slate-200 bg-white/95 px-6 py-3.5 backdrop-blur-md shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.15)] dark:border-navy-700 dark:bg-navy-900/95 dark:shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.5)]">
+        <span className="text-sm font-medium text-amber-600 dark:text-amber-300">You have unsaved changes.</span>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onDiscard}
             disabled={saving}
-            className="flex items-center gap-1.5 rounded-lg border border-navy-600 px-4 py-2 text-sm font-semibold text-slate-300 hover:border-navy-500 hover:text-white disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400 hover:text-slate-900 disabled:opacity-50 dark:border-navy-600 dark:bg-navy-800 dark:text-slate-300 dark:hover:border-navy-500 dark:hover:text-white"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Discard
           </button>

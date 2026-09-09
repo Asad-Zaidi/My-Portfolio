@@ -11,6 +11,9 @@ import {
   LuGripVertical as GripVertical,
   LuCloudUpload as UploadCloud,
   LuExternalLink as ExternalLink,
+  LuPencil as Edit,
+  LuArrowLeft as ArrowLeft,
+  LuCheck as Check,
 } from "react-icons/lu";
 import { adminUploadFile } from "../../../api/api";
 import { useAuth } from "../../../context/AuthContext";
@@ -93,7 +96,74 @@ function ImageUploadField({ value, onChange }) {
   );
 }
 
+function CertificationFields({ item, index, updateItemField }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Title</label>
+        <input
+          type="text"
+          className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.title || ""}
+          onChange={(e) => updateItemField(index, "title", e.target.value)}
+        />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Provider</label>
+        <input
+          type="text"
+          className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.provider || ""}
+          onChange={(e) => updateItemField(index, "provider", e.target.value)}
+        />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Year</label>
+        <input
+          type="text"
+          className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.year || ""}
+          onChange={(e) => updateItemField(index, "year", e.target.value)}
+        />
+      </div>
+      <div className="sm:col-span-2">
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Certificate Image</label>
+        <ImageUploadField value={item.image} onChange={(value) => updateItemField(index, "image", value)} />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Credential ID</label>
+        <input
+          type="text"
+          className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.credentialId || ""}
+          onChange={(e) => updateItemField(index, "credentialId", e.target.value)}
+        />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Credential URL</label>
+        <input
+          type="url"
+          className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.credentialUrl || ""}
+          onChange={(e) => updateItemField(index, "credentialUrl", e.target.value)}
+        />
+      </div>
+      <div className="sm:col-span-2">
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">Description</label>
+        <textarea
+          rows={4}
+          className="w-full resize-y rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+          value={item.description || ""}
+          onChange={(e) => updateItemField(index, "description", e.target.value)}
+        />
+      </div>
+    </div>
+  );
+}
+
 function CertificationsEditor({ items = [], onChange }) {
+  const [editingIndex, setEditingIndex] = useState(null);
+
   const move = (index, dir) => {
     const next = [...items];
     const target = index + dir;
@@ -102,8 +172,12 @@ function CertificationsEditor({ items = [], onChange }) {
     onChange(next);
   };
 
-  const remove = (index) => onChange(items.filter((_, i) => i !== index));
-  const add = () =>
+  const remove = (index) => {
+    onChange(items.filter((_, i) => i !== index));
+    if (editingIndex === index) setEditingIndex(null);
+    else if (editingIndex !== null && editingIndex > index) setEditingIndex(editingIndex - 1);
+  };
+  const add = () => {
     onChange([
       ...items,
       {
@@ -117,6 +191,8 @@ function CertificationsEditor({ items = [], onChange }) {
         description: "",
       },
     ]);
+    setEditingIndex(items.length);
+  };
 
   const updateItemField = (index, key, val) => {
     const next = [...items];
@@ -124,111 +200,92 @@ function CertificationsEditor({ items = [], onChange }) {
     onChange(next);
   };
 
+  if (editingIndex !== null && items[editingIndex]) {
+    const item = items[editingIndex];
+    return (
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-navy-700 bg-navy-800/80 p-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setEditingIndex(null)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-navy-600 bg-navy-900/60 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:border-accent/60 hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" /> Back to Certifications
+            </button>
+            <div>
+              <h2 className="text-sm font-bold text-white">{item.title || `Certification #${editingIndex + 1}`}</h2>
+              <p className="text-xs text-slate-500">Edit certification details and credential information.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => remove(editingIndex)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-3.5 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+            >
+              <Trash2 className="h-4 w-4" /> Delete
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditingIndex(null)}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent-dark"
+            >
+              <Check className="h-4 w-4" /> Done Editing
+            </button>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-navy-700 bg-navy-800/80 p-5">
+          <CertificationFields item={item} index={editingIndex} updateItemField={updateItemField} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {items.length === 0 && (
         <p className="rounded-lg border border-dashed border-navy-600 bg-navy-900/30 px-4 py-6 text-center text-sm text-slate-500">
           No {ITEM_LABEL}s yet — add one below.
         </p>
       )}
 
-      {items.map((item, index) => (
-        <div key={index} className="group flex gap-3 rounded-xl border border-navy-700 bg-navy-800/60 p-4 hover:border-navy-600">
-          <div className="flex shrink-0 flex-col items-center gap-1 pt-1 text-slate-500">
-            <GripVertical className="h-4 w-4" />
-            <button
-              type="button"
-              onClick={() => move(index, -1)}
-              disabled={index === 0}
-              className="rounded p-0.5 hover:bg-navy-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-              aria-label="Move up"
-            >
-              <ChevronUp className="h-3.5 w-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => move(index, 1)}
-              disabled={index === items.length - 1}
-              className="rounded p-0.5 hover:bg-navy-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-              aria-label="Move down"
-            >
-              <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Title</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.title || ""}
-                  onChange={(e) => updateItemField(index, "title", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Provider</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.provider || ""}
-                  onChange={(e) => updateItemField(index, "provider", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Year</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.year || ""}
-                  onChange={(e) => updateItemField(index, "year", e.target.value)}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Certificate Image</label>
-                <ImageUploadField value={item.image} onChange={(v) => updateItemField(index, "image", v)} />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Credential ID</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.credentialId || ""}
-                  onChange={(e) => updateItemField(index, "credentialId", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Credential URL</label>
-                <input
-                  type="url"
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  value={item.credentialUrl || ""}
-                  onChange={(e) => updateItemField(index, "credentialUrl", e.target.value)}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">Description</label>
-                <textarea
-                  rows={4}
-                  className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 resize-y"
-                  value={item.description || ""}
-                  onChange={(e) => updateItemField(index, "description", e.target.value)}
-                />
+      {items.length > 0 && (
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {items.map((item, index) => (
+            <div key={item.id || index} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-navy-700 bg-navy-800/60 hover:border-navy-600">
+              {item.image ? (
+                <img src={item.image} alt={item.title || "Certificate preview"} className="h-40 w-full object-cover" />
+              ) : (
+                <div className="flex h-40 items-end bg-gradient-to-br from-accent/80 via-indigo-600 to-navy-900 p-4">
+                  <span className="text-sm font-bold text-white">{item.title || "Untitled certification"}</span>
+                </div>
+              )}
+              <div className="flex flex-1 flex-col p-4">
+                <h2 className="line-clamp-2 text-base font-bold text-white">{item.title || "Untitled certification"}</h2>
+                <p className="mt-1 text-xs text-slate-400">{item.provider || "Provider not specified"}{item.year ? ` · ${item.year}` : ""}</p>
+                <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-300">{item.description || "No description provided yet."}</p>
+                {item.credentialUrl && (
+                  <a href={item.credentialUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-accent-light hover:underline">
+                    <ExternalLink className="h-3 w-3" /> View credential
+                  </a>
+                )}
+                <div className="mt-4 flex items-center justify-between border-t border-navy-700/70 pt-3">
+                  <div className="flex items-center gap-0.5 text-slate-400">
+                    <GripVertical className="mr-1 h-3.5 w-3.5" />
+                    <button type="button" onClick={() => move(index, -1)} disabled={index === 0} className="rounded p-1 hover:bg-navy-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-20" title="Move certification up"><ChevronUp className="h-3.5 w-3.5" /></button>
+                    <button type="button" onClick={() => move(index, 1)} disabled={index === items.length - 1} className="rounded p-1 hover:bg-navy-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-20" title="Move certification down"><ChevronDown className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button type="button" onClick={() => setEditingIndex(index)} className="inline-flex items-center gap-1.5 rounded-lg border border-navy-600 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:border-accent hover:text-white" title="Edit certification"><Edit className="h-3.5 w-3.5 text-accent-light" /> Edit</button>
+                    <button type="button" onClick={() => remove(index)} className="inline-flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 p-1.5 text-red-400 hover:bg-red-500 hover:text-white" title="Delete certification"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => remove(index)}
-            className="h-fit shrink-0 rounded-lg p-2 text-slate-500 hover:bg-red-500/10 hover:text-red-400"
-            aria-label={`Remove ${ITEM_LABEL}`}
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+          ))}
         </div>
-      ))}
+      )}
 
       <button
         type="button"
