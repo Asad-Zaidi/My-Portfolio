@@ -64,6 +64,7 @@ function SocialLinks({ items = [] }) {
 
 export default function Footer({ personal, nav, socials, noNegativeMargin = false }) {
   const year = new Date().getFullYear();
+  const displayName = personal?.name || "Asad Zaidi";
 
   return (
     <footer className={`relative pt-6 bg-white text-slate-600 dark:bg-navy-950 dark:text-slate-400 ${noNegativeMargin ? "" : "-mx-12 md:-mx-32"}`}>
@@ -81,7 +82,7 @@ export default function Footer({ personal, nav, socials, noNegativeMargin = fals
                 rel="noopener noreferrer"
                 className="hover:text-accent"
               >
-                {personal.name}
+                {displayName}
               </a>
             </span>
           </div>
@@ -109,7 +110,7 @@ export default function Footer({ personal, nav, socials, noNegativeMargin = fals
                 rel="noopener noreferrer"
                 className="hover:text-accent"
               >
-                {personal.name}
+                {displayName}
               </a>{" "}
               All rights reserved.
             </p>
