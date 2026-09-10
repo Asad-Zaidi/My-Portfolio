@@ -1,5 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import AttributionWatermark from "./components/AttributionWatermark";
 import { ToastProvider } from "./components/ToastContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import AdminRoutes from "./routes/AdminRoutes";
@@ -20,6 +21,7 @@ function App() {
     <ThemeProvider>
       <BrowserRouter>
         <AppRouter adminElement={<AdminRouteShell />} />
+        <AttributionWatermark />
       </BrowserRouter>
     </ThemeProvider>
   );

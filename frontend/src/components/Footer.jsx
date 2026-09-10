@@ -26,21 +26,6 @@ function getSocialLink(platform) {
   return socialLinks.find((social) => social.key === (platform || "").toLowerCase()) || null;
 }
 
-const OFFICIAL_HOSTS = new Set(["asadzaidi.vercel.app", "www.asadzaidi.vercel.app"]);
-
-function AttributionWatermark() {
-  const hostname = window.location.hostname.toLowerCase();
-  const isOfficialSite = OFFICIAL_HOSTS.has(hostname);
-
-  if (isOfficialSite) return null;
-
-  return (
-    <div className="fixed bottom-3 right-3 z-50 rounded-full border border-slate-300/70 bg-white/90 px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-lg backdrop-blur dark:border-white/15 dark:bg-navy-950/90 dark:text-slate-300">
-      Asad Zaidi
-    </div>
-  );
-}
-
 /**
  * Renders only the platforms present in the portfolio API — never an empty/broken
  * icon for a social network that wasn't configured.
@@ -81,15 +66,25 @@ export default function Footer({ personal, nav, socials, noNegativeMargin = fals
   const year = new Date().getFullYear();
 
   return (
-    <>
-      <footer className={`relative pt-6 bg-white text-slate-600 dark:bg-navy-950 dark:text-slate-400 ${noNegativeMargin ? "" : "-mx-12 md:-mx-32"}`}>
+    <footer className={`relative pt-6 bg-white text-slate-600 dark:bg-navy-950 dark:text-slate-400 ${noNegativeMargin ? "" : "-mx-12 md:-mx-32"}`}>
         <div className="container px-8 flex flex-col items-center gap-6 text-center md:px-32">
-          <a href="#home" className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+          <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm">
-              {personal.initials}
+              <a href="#home" aria-label="Back to home">
+                {personal.initials}
+              </a>
             </span>
-            <span className="text-lg">{personal.name}</span>
-          </a>
+            <span className="text-lg">
+              <a
+                href="https://github.com/Asad-Zaidi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent"
+              >
+                {personal.name}
+              </a>
+            </span>
+          </div>
 
           {nav?.length > 0 && (
             <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
@@ -107,12 +102,19 @@ export default function Footer({ personal, nav, socials, noNegativeMargin = fals
 
           <div className="w-full border-t  border-slate-200 dark:border-white/10 py-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <p>
-              &copy; {year} {personal.name}. All rights reserved.
+              &copy; {year}{" "}
+              <a
+                href="https://github.com/Asad-Zaidi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent"
+              >
+                {personal.name}
+              </a>{" "}
+              All rights reserved.
             </p>
           </div>
         </div>
-      </footer>
-      <AttributionWatermark />
-    </>
+    </footer>
   );
 }
